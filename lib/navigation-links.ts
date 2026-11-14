@@ -1,0 +1,17 @@
+export type NavigationLink = {
+  label: string
+  href: string
+  /** Match child routes, e.g. /jobs/123 highlights "Browse jobs". */
+  match?: string
+}
+
+export const navigationLinks: NavigationLink[] = [
+  { label: "Browse jobs", href: "/jobs", match: "/jobs" },
+  { label: "Companies", href: "/companies", match: "/companies" },
+  { label: "Pricing", href: "/pricing", match: "/pricing" },
+]
+
+export const accountLinks = {
+  signIn: { label: "Sign in", href: "/login" },
+  getStarted: { label: "Get started", href: "/register" },
+} as const
