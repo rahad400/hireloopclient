@@ -12,35 +12,79 @@ type ThemeContextValue = {
 }
 
 const ThemeContext = React.createContext<ThemeContextValue | null>(null)
+const themeChangeEvent = "hireloop:theme-change"
+let inMemoryTheme: Theme | null = null
 
-function getResolvedTheme(theme: Theme): ResolvedTheme {
-  if (theme !== "system") {
-    return theme
+function parseTheme(value: string | null): Theme {
+  if (value === "light" || value === "dark") {
+    return value
   }
 
+  return "system"
+}
+
+function subscribeToTheme(onChange: () => void) {
+  function onStorage(event: StorageEvent) {
+    if (event.key === "theme" || event.key === null) {
+      inMemoryTheme = parseTheme(event.newValue)
+      onChange()
+    }
+  }
+
+  window.addEventListener("storage", onStorage)
+  window.addEventListener(themeChangeEvent, onChange)
+  return () => {
+    window.removeEventListener("storage", onStorage)
+    window.removeEventListener(themeChangeEvent, onChange)
+  }
+}
+
+function getThemeSnapshot(): Theme {
+  try {
+    const savedTheme = window.localStorage.getItem("theme")
+    if (savedTheme !== null) {
+      return parseTheme(savedTheme)
+    }
+  } catch {
+    return inMemoryTheme ?? "system"
+  }
+
+  return inMemoryTheme ?? "system"
+}
+
+function getServerThemeSnapshot(): Theme {
+  return "system"
+}
+
+function subscribeToSystemTheme(onChange: () => void) {
+  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
+  mediaQuery.addEventListener("change", onChange)
+  return () => mediaQuery.removeEventListener("change", onChange)
+}
+
+function getSystemThemeSnapshot(): ResolvedTheme {
   return window.matchMedia("(prefers-color-scheme: dark)").matches
     ? "dark"
     : "light"
 }
 
+function getServerSystemThemeSnapshot(): ResolvedTheme {
+  return "light"
+}
+
 function applyTheme(theme: ResolvedTheme) {
+  const transitionStyle = document.createElement("style")
+  transitionStyle.textContent =
+    "*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}"
+  document.head.appendChild(transitionStyle)
+  window.getComputedStyle(document.body)
+
   const root = document.documentElement
   root.classList.remove("light", "dark")
   root.classList.add(theme)
   root.style.colorScheme = theme
-}
 
-function readSavedTheme(): Theme {
-  try {
-    const savedTheme = window.localStorage.getItem("theme")
-    if (savedTheme === "light" || savedTheme === "dark") {
-      return savedTheme
-    }
-  } catch {
-    return "system"
-  }
-
-  return "system"
+  window.setTimeout(() => transitionStyle.remove(), 1)
 }
 
 export function useTheme() {
@@ -91,12 +135,20 @@ function ThemeHotkey() {
 }
 
 function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = React.useState<Theme>("system")
-  const [resolvedTheme, setResolvedTheme] =
-    React.useState<ResolvedTheme>("light")
+  const theme = React.useSyncExternalStore(
+    subscribeToTheme,
+    getThemeSnapshot,
+    getServerThemeSnapshot
+  )
+  const systemTheme = React.useSyncExternalStore(
+    subscribeToSystemTheme,
+    getSystemThemeSnapshot,
+    getServerSystemThemeSnapshot
+  )
+  const resolvedTheme = theme === "system" ? systemTheme : theme
 
   const setTheme = React.useCallback((nextTheme: Theme) => {
-    setThemeState(nextTheme)
+    inMemoryTheme = nextTheme
 
     try {
       window.localStorage.setItem("theme", nextTheme)
@@ -104,30 +156,12 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
       // Theme changes still apply when storage is unavailable.
     }
 
-    const resolved = getResolvedTheme(nextTheme)
-    setResolvedTheme(resolved)
-    applyTheme(resolved)
+    window.dispatchEvent(new Event(themeChangeEvent))
   }, [])
 
   React.useEffect(() => {
-    const savedTheme = readSavedTheme()
-    const resolved = getResolvedTheme(savedTheme)
-    setThemeState(savedTheme)
-    setResolvedTheme(resolved)
-    applyTheme(resolved)
-
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
-    const onSystemThemeChange = () => {
-      if (savedTheme === "system") {
-        const systemTheme = getResolvedTheme("system")
-        setResolvedTheme(systemTheme)
-        applyTheme(systemTheme)
-      }
-    }
-
-    mediaQuery.addEventListener("change", onSystemThemeChange)
-    return () => mediaQuery.removeEventListener("change", onSystemThemeChange)
-  }, [])
+    applyTheme(resolvedTheme)
+  }, [resolvedTheme])
 
   const contextValue = React.useMemo(
     () => ({ theme, resolvedTheme, setTheme }),

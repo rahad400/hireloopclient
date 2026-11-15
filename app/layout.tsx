@@ -1,7 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import Script from "next/script"
 import { cn } from "@/lib/utils"
 import { Footer } from "@/components/footer/footer"
 import { Navbar } from "@/components/navigation/navbar"
@@ -20,7 +19,6 @@ export default function RootLayout({
       className={cn("antialiased", fontMono.variable, "font-sans", geist.variable)}
     >
       <body className="flex min-h-screen flex-col bg-night text-ink">
-        <Script src="/theme-init.js" strategy="beforeInteractive" />
         <ThemeProvider>
           <Navbar />
           <main className="flex-1">{children}</main>

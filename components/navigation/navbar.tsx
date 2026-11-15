@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { ArrowUpRight, MenuIcon, XIcon } from "lucide-react"
 
 import { HireloopLogo } from "@/components/navigation/hireloop-logo"
@@ -22,8 +22,7 @@ import {
 } from "@/lib/navigation-links"
 import { cn } from "@/lib/utils"
 import { authClient, useSession } from "@/app/lip/auth-client"
-import { signOut } from "better-auth/api"
-import { useRouter } from "next/router"
+
 
 function isActivePath(pathname: string, item: NavigationLink) {
   const target = item.match ?? item.href
