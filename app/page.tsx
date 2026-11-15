@@ -1,6 +1,7 @@
 import { HeroBanner } from "@/components/banner/hero-banner"
 import { StatsSection } from "@/components/home/stats-section"
 import { CoreFeaturesSection } from "@/components/home/core-features-section"
+import { PricingSection } from "@/components/home/pricing-section"
 
 export default function HomePage() {
   return (
@@ -8,6 +9,7 @@ export default function HomePage() {
       <HeroBanner />
       <StatsSection />
       <CoreFeaturesSection />
+      <PricingSection />
     </div>
   )
 }
