@@ -12,6 +12,6 @@ export const navigationLinks: NavigationLink[] = [
 ]
 
 export const accountLinks = {
-  signIn: { label: "Sign in", href: "/login" },
-  getStarted: { label: "Get started", href: "/register" },
+  signIn: { label: "Sign in", href: "/sign-in" },
+  getStarted: { label: "Get started", href: "/sign-up" },
 } as const
