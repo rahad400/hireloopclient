@@ -33,7 +33,7 @@ const PLANS = [
     icon: BarChart2,
     iconColor: "#a855f7",
     monthlyPrice: 17,
-    yearlyPrice: 12,
+    yearlyPrice: 153,
     description: "Start building your insights hub:",
     features: [
       "Daily AI match brief (top 5)",
@@ -50,7 +50,7 @@ const PLANS = [
     icon: Zap,
     iconColor: "#a855f7",
     monthlyPrice: 99,
-    yearlyPrice: 74,
+    yearlyPrice: 891,
     description: "Start building your insights hub:",
     features: [
       "Everything in Pro",
