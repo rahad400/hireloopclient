@@ -1,12 +1,24 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { ArrowUpRight, MenuIcon, XIcon } from "lucide-react"
+import {
+  ArrowUpRight,
+  LayoutDashboard,
+  LogOut,
+  MenuIcon,
+  Settings,
+  XIcon,
+} from "lucide-react"
 
 import { HireloopLogo } from "@/components/navigation/hireloop-logo"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button, buttonVariants } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
   Sheet,
   SheetClose,
@@ -23,7 +35,6 @@ import {
 import { cn } from "@/lib/utils"
 import { authClient, useSession } from "@/app/lip/auth-client"
 
-
 function isActivePath(pathname: string, item: NavigationLink) {
   const target = item.match ?? item.href
   return pathname === target || pathname.startsWith(`${target}/`)
@@ -33,7 +44,7 @@ export function Navbar() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const { data: session } = useSession()
+  const { data: session, isPending } = useSession()
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
 
@@ -110,41 +121,95 @@ export function Navbar() {
                 aria-hidden
                 className="hidden h-6 w-px bg-white/10 lg:block"
               />
-
-              <div className="hidden items-center gap-2 lg:flex">
-                {session ? (
-                  <>
-                    {" "}
-                    {session?.user.name}{" "}
-                    <button
-                      onClick={() => signOutHeandal()}
-                      className="border border-red-500 text-red-500"
-                    >
-                      sign out
-                    </button>{" "}
-                  </>
+              <div>
+                {isPending ? (
+                  <span
+                    className="inline-block size-5 animate-spin rounded-full border-2 border-white/20 border-t-brand"
+                    aria-label="Loading"
+                    role="status"
+                  />
                 ) : (
-                  <>
-                    <Link
-                      href={accountLinks.signIn.href}
-                      className={cn(
-                        buttonVariants({ variant: "secondary", size: "lg" }),
-                        "h-10 rounded-full bg-white px-4 text-[13px] font-semibold text-brand hover:bg-white/90"
-                      )}
-                    >
-                      {accountLinks.signIn.label}
-                    </Link>
-                    <Link
-                      href={accountLinks.getStarted.href}
-                      className={cn(
-                        buttonVariants({ variant: "default", size: "lg" }),
-                        "h-10 rounded-full bg-brand px-5 text-[13px] font-semibold text-brand-foreground shadow-[0_10px_30px_-12px_rgba(92,83,254,0.9)] hover:bg-brand-strong"
-                      )}
-                    >
-                      {accountLinks.getStarted.label}
-                      <ArrowUpRight aria-hidden className="size-4" />
-                    </Link>
-                  </>
+                  <div className="hidden items-center gap-2 lg:flex">
+                    {session ? (
+                      /* ── Dashboard link + Avatar dropdown ── */
+                      <>
+                        {/* Dashboard link */}
+                        <Link
+                          href={`/${(session.user as { role?: string })?.role ?? "candidate"}`}
+                          className={cn(
+                            buttonVariants({
+                              variant: "secondary",
+                              size: "lg",
+                            }),
+                            "h-10 gap-2 rounded-full bg-brand/10 px-4 text-[13px] font-semibold text-brand hover:bg-brand/20"
+                          )}
+                        >
+                          <LayoutDashboard className="size-4" />
+                          Dashboard
+                        </Link>
+
+                        {/* Avatar only — dropdown on click */}
+                        <DropdownMenu>
+                          <DropdownMenuTrigger
+                            render={
+                              <button
+                                aria-label="Account menu"
+                                className="rounded-full focus-visible:ring-2 focus-visible:ring-brand/80 focus-visible:ring-offset-2 focus-visible:ring-offset-night focus-visible:outline-none"
+                              />
+                            }
+                          >
+                            <Avatar className="h-9 w-9 ring-2 ring-white/10 transition-all hover:ring-brand/50">
+                              <AvatarImage
+                                src={
+                                  session.user?.image ||
+                                  "/fig-avatars/profile.jpg"
+                                }
+                                alt={
+                                  session.user?.name ??
+                                  "/fig-avatars/profile.jpg"
+                                }
+                              />
+                              <AvatarFallback className="bg-brand/20 text-xs font-semibold text-brand">
+                                {session.user?.name
+                                  ? session.user.name
+                                      .split(" ")
+                                      .map((n) => n[0])
+                                      .join("")
+                                      .toUpperCase()
+                                      .slice(0, 2)
+                                  : "HL"}
+                              </AvatarFallback>
+                            </Avatar>
+                          </DropdownMenuTrigger>
+                        </DropdownMenu>
+                      </>
+                    ) : (
+                      <>
+                        <Link
+                          href={accountLinks.signIn.href}
+                          className={cn(
+                            buttonVariants({
+                              variant: "secondary",
+                              size: "lg",
+                            }),
+                            "h-10 rounded-full bg-white px-4 text-[13px] font-semibold text-brand hover:bg-white/90"
+                          )}
+                        >
+                          {accountLinks.signIn.label}
+                        </Link>
+                        <Link
+                          href={accountLinks.getStarted.href}
+                          className={cn(
+                            buttonVariants({ variant: "default", size: "lg" }),
+                            "h-10 rounded-full bg-brand px-5 text-[13px] font-semibold text-brand-foreground shadow-[0_10px_30px_-12px_rgba(92,83,254,0.9)] hover:bg-brand-strong"
+                          )}
+                        >
+                          {accountLinks.getStarted.label}
+                          <ArrowUpRight aria-hidden className="size-4" />
+                        </Link>
+                      </>
+                    )}
+                  </div>
                 )}
               </div>
 
@@ -238,14 +303,68 @@ export function Navbar() {
                       <div className="flex flex-col gap-2">
                         {session ? (
                           <>
-                            {" "}
-                            {session?.user.name}{" "}
-                            <button
-                              onClick={() => signOutHeandal()}
-                              className="border border-red-500 px-1 text-red-500"
+                            {/* User info row */}
+                            <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5">
+                              <Avatar className="h-9 w-9 shrink-0">
+                                <AvatarImage
+                                  src={
+                                    session.user?.image ||
+                                    "/fig-avatars/profile.jpg"
+                                  }
+                                  alt={session.user?.name ?? ""}
+                                />
+                                <AvatarFallback className="bg-brand/20 text-xs font-semibold text-brand">
+                                  {session.user?.name
+                                    ? session.user.name
+                                        .split(" ")
+                                        .map((n) => n[0])
+                                        .join("")
+                                        .toUpperCase()
+                                        .slice(0, 2)
+                                    : "HL"}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div className="min-w-0">
+                                <p className="truncate text-sm font-semibold text-ink">
+                                  {session.user?.name}
+                                </p>
+                                <p className="truncate text-xs text-ink-muted">
+                                  {session.user?.email}
+                                </p>
+                              </div>
+                            </div>
+
+                            <Link
+                              href={`/${(session.user as { role?: string })?.role ?? "candidate"}`}
+                              onClick={() => setOpen(false)}
+                              className={cn(
+                                buttonVariants({
+                                  variant: "default",
+                                  size: "lg",
+                                }),
+                                "h-11 w-full gap-2 rounded-xl bg-brand text-brand-foreground shadow-[0_10px_30px_-12px_rgba(92,83,254,0.9)] hover:bg-brand-strong"
+                              )}
                             >
-                              sign out
-                            </button>{" "}
+                              <LayoutDashboard className="size-4" />
+                              Dashboard
+                            </Link>
+
+                            <button
+                              onClick={() => {
+                                signOutHeandal()
+                                setOpen(false)
+                              }}
+                              className={cn(
+                                buttonVariants({
+                                  variant: "outline",
+                                  size: "lg",
+                                }),
+                                "h-11 w-full gap-2 rounded-xl border-white/15 bg-white/[0.03] text-red-400 hover:bg-red-500/10 hover:text-red-300"
+                              )}
+                            >
+                              <LogOut className="size-4" />
+                              Sign out
+                            </button>
                           </>
                         ) : (
                           <>
