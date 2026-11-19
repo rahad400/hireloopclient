@@ -1,11 +1,11 @@
-import React from 'react';
+import type { Metadata } from "next"
 
-const AddJobPage = () => {
-    return (
-        <div>
-            <h2>add job</h2>
-        </div>
-    );
-};
+import { AddJobForm } from "@/components/employer/add-job/add-job-form"
 
-export default AddJobPage;
+export const metadata: Metadata = {
+  title: "Post a New Job | HireLoop",
+}
+
+export default function AddJobPage() {
+  return <AddJobForm />
+}

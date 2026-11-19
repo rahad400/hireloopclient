@@ -39,18 +39,24 @@ export function DashboardSidebar() {
     ? session.user.role
     : routeRole
   const config = dashboardRoles[role]
-
+const { ctaLabel, ctaHref } = config
   const profile: DashboardProfile = {
     ...config.profile,
     name: session?.user?.name || config.profile.name,
     avatar: session?.user?.image || config.profile.avatar,
   }
 
+  // Nested routes like `/employer/jobs/new` match two links; keep the most
+  // specific one highlighted.
+  const activeHref = config.items
+    .filter((item) => isDashboardNavItemActive(pathname, item.href))
+    .sort((a, b) => b.href.length - a.href.length)[0]?.href
+
   return (
     <Sidebar
       collapsible="offcanvas"
       className="border-white/[0.06] [--sidebar:#0b0b0c]"
-    >  
+    >
       <SidebarHeader className="gap-5 px-3 pt-5 pb-0">
         <DashboardBrand subtitle={config.subtitle} />
         <DashboardIdentityCard {...profile} />
@@ -64,7 +70,7 @@ export function DashboardSidebar() {
                 <DashboardNavLink
                   key={item.href}
                   item={item}
-                  active={isDashboardNavItemActive(pathname, item.href)}
+                  active={item.href === activeHref}
                 />
               ))}
             </SidebarMenu>
@@ -73,7 +79,7 @@ export function DashboardSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="gap-0 px-3 pt-0 pb-4">
-        <DashboardSidebarFooter ctaLabel={config.ctaLabel} profile={profile} />
+        <DashboardSidebarFooter ctaLabel={config.ctaLabel} profile={profile}  ctaHref={config.ctaHref} />
       </SidebarFooter>
     </Sidebar>
   )

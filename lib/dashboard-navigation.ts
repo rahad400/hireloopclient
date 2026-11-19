@@ -5,9 +5,7 @@ import {
   FileText,
   HomeIcon,
   LayoutDashboard,
-  
   PlusCircle,
-  
   Settings,
   Users,
   Wallet,
@@ -23,7 +21,7 @@ export type DashboardNavItem = {
 }
 
 export type DashboardProfile = {
-   name:string
+  name: string
   roleLabel: string
   badge: string
   avatar: string
@@ -32,6 +30,7 @@ export type DashboardProfile = {
 export type DashboardRoleConfig = {
   subtitle: string
   ctaLabel: string
+  ctaHref: string
   profile: DashboardProfile
   items: DashboardNavItem[]
 }
@@ -45,6 +44,7 @@ export const dashboardRoles: Record<DashboardRole, DashboardRoleConfig> = {
   candidate: {
     subtitle: "Seeker Portal",
     ctaLabel: "Post Resume",
+    ctaHref: "/jobs",
     profile: {
       name: "candidate",
       roleLabel: "Job Seeker",
@@ -68,6 +68,7 @@ export const dashboardRoles: Record<DashboardRole, DashboardRoleConfig> = {
   employer: {
     subtitle: "Employer Portal",
     ctaLabel: "Post a Job",
+    ctaHref: "/employer/jobs/new",
     profile: {
       name: "employer",
       roleLabel: "Employer",
@@ -78,7 +79,7 @@ export const dashboardRoles: Record<DashboardRole, DashboardRoleConfig> = {
       { label: "Dashboard", href: "/employer", icon: LayoutDashboard },
       { label: "My Company", href: "/employer/company", icon: Building2 },
       { label: "Manage Jobs", href: "/employer/jobs", icon: Briefcase },
-      { label: "Add Job", href: "/employer/jobs/new", icon:PlusCircle },
+      { label: "Add Job", href: "/employer/jobs/new", icon: PlusCircle },
       { label: "Applications", href: "/employer/applications", icon: FileText },
       { label: "Settings", href: "/employer/settings", icon: Settings },
       { label: "Home", href: "/", icon: HomeIcon },
@@ -87,6 +88,7 @@ export const dashboardRoles: Record<DashboardRole, DashboardRoleConfig> = {
   admin: {
     subtitle: "Admin Console",
     ctaLabel: "Invite Admin",
+    ctaHref: "/admin/users",
     profile: {
       name: "admin",
       roleLabel: "System Admin",

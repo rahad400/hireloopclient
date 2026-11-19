@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className="flex min-h-screen flex-col bg-night text-ink">
         <ThemeProvider>
           {children}
-          <Toaster position="top-right" richColors />
+          <Toaster position="bottom-right" richColors />
         </ThemeProvider>
       </body>
     </html>
