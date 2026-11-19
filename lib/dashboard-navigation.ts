@@ -5,6 +5,9 @@ import {
   FileText,
   HomeIcon,
   LayoutDashboard,
+  
+  PlusCircle,
+  
   Settings,
   Users,
   Wallet,
@@ -75,6 +78,7 @@ export const dashboardRoles: Record<DashboardRole, DashboardRoleConfig> = {
       { label: "Dashboard", href: "/employer", icon: LayoutDashboard },
       { label: "My Company", href: "/employer/company", icon: Building2 },
       { label: "Manage Jobs", href: "/employer/jobs", icon: Briefcase },
+      { label: "Add Job", href: "/employer/jobs/new", icon:PlusCircle },
       { label: "Applications", href: "/employer/applications", icon: FileText },
       { label: "Settings", href: "/employer/settings", icon: Settings },
       { label: "Home", href: "/", icon: HomeIcon },
