@@ -15,7 +15,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
     <SidebarProvider style={sidebarStyle}>
       <DashboardSidebar />
 
-      <SidebarInset className="min-h-svh bg-[#0e0e11]">
+      <SidebarInset className="min-h-svh min-w-0 bg-[#0e0e11]">
         <header className="flex h-14 shrink-0 items-center gap-3 border-b border-white/[0.07] px-4">
           <SidebarTrigger className="text-ink-muted hover:bg-white/[0.06] hover:text-ink" />
         </header>

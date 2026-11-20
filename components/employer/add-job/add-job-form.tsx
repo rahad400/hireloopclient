@@ -13,6 +13,8 @@ import { emptyJobForm, saveJob, type JobFormValues } from "@/lib/employer-job"
 import { jobPrimaryButtonClassName } from "@/lib/job-form-styles"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
+import { createJobs } from "@/app/lip/actions/jobs"
+
 /** Returns the labels of the fields the user still has to fill in. */
 function getMissingFields(values: JobFormValues) {
   const missing: string[] = []
@@ -48,7 +50,7 @@ export function AddJobForm() {
     setErrorMessage(null)
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     const missing = getMissingFields(values)
@@ -56,7 +58,6 @@ export function AddJobForm() {
       setErrorMessage(`Please add: ${missing.join(", ")}.`)
       return
     }
-    // console.log(missing)
     setErrorMessage(null)
     setIsSaving(true)
 
@@ -65,7 +66,9 @@ export function AddJobForm() {
       description: `${job.title} is now live.`,
     })
     router.push("/employer/jobs")
-    // console.log(job)
+    
+    const result = createJobs(job)
+    console.log(result)
   }
 
   return (
