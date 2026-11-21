@@ -23,6 +23,18 @@ export type EmployerJob = JobFormValues & {
 
 export type JobStatus = "Active" | "Expired"
 
+/** `all` shows every post; the other values match `JobStatus`. */
+export type JobStatusFilter = "all" | JobStatus
+
+export const jobStatusFilterOptions: {
+  value: JobStatusFilter
+  label: string
+}[] = [
+  { value: "all", label: "All Jobs" },
+  { value: "Active", label: "Active" },
+  { value: "Expired", label: "Expired" },
+]
+
 export const jobTypeOptions: JobType[] = [
   "Full-time",
   "Part-time",

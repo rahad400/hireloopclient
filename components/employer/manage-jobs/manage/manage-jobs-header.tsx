@@ -1,13 +1,10 @@
 import Link from "next/link"
-import { ChevronRight, Plus } from "lucide-react"
+import { ChevronRight } from "lucide-react"
 
-import { primaryButtonClassName } from "@/components/employer/manage-jobs/ts/manage-jobs-styles"
-import { Button } from "@/components/ui/button"
-
-/** Breadcrumb, page title and the purple "New Job Post" action. */
+/** Breadcrumb and page title. The actions live in the jobs toolbar. */
 export function ManageJobsHeader() {
   return (
-    <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <header className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
         <nav
           aria-label="Breadcrumb"
@@ -29,15 +26,6 @@ export function ManageJobsHeader() {
           across your organization.
         </p>
       </div>
-
-      <Button
-        render={<Link href="/employer/jobs/new" />}
-        nativeButton={false}
-        className={`${primaryButtonClassName} self-start`}
-      >
-        <Plus aria-hidden="true" className="size-4" />
-        New Job Post
-      </Button>
     </header>
   )
 }

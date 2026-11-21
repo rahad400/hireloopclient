@@ -42,9 +42,9 @@ export function ManageJobsTable({
   onDelete,
 }: ManageJobsTableProps) {
   return (
-    <div className={cn(panelClassName, "hidden xl:block")}>
-      <Table className="text-[13px]">
-        <TableHeader>
+    <div className={cn(panelClassName, "hidden overflow-clip xl:block")}>
+      <Table className="text-[13px]" containerClassName="overflow-visible">
+        <TableHeader className="md:sticky md:top-[var(--manage-jobs-sticky-height)] md:z-20 md:bg-[#0c0c0f]">
           <TableRow className="border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.02]">
             <TableHead className={cn(tableHeadClassName, "w-[22%]")}>
               Job Title &amp; Dept

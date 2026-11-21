@@ -1,9 +1,9 @@
 "use client"
 
-import { Copy, MoreVertical, Pencil, Trash2 } from "lucide-react"
+import { Copy, Eye, MoreVertical, Pencil, Trash2 } from "lucide-react"
 
 import {
-  iconButtonClassName,
+  
   kebabButtonClassName,
   updateButtonClassName,
 } from "@/components/employer/manage-jobs/ts/manage-jobs-styles"
@@ -11,10 +11,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import type { EmployerJob } from "@/components/employer/manage-jobs/ts/employer-job"
+import { DeleteDailog } from "./delete-dailog"
 
 type ManageJobActionsProps = {
   job: EmployerJob
@@ -43,16 +43,8 @@ export function ManageJobActions({
         Update
       </button>
 
-      <button
-        type="button"
-        onClick={() => onDuplicate(job)}
-        aria-label={`Duplicate ${job.title}`}
-        title="Duplicate job"
-        className={iconButtonClassName}
-      >
-        <Copy aria-hidden="true" className="size-3.5" />
-      </button>
-
+        <DeleteDailog job={job} onDelete={onDelete} />
+      
       <DropdownMenu>
         <DropdownMenuTrigger
           className={kebabButtonClassName}
@@ -69,11 +61,11 @@ export function ManageJobActions({
             onClick={() => onEdit(job)}
             className={menuItemClassName}
           >
-            <Pencil aria-hidden="true" />
-            Update
+            <Eye aria-hidden="true" />
+            Details
           </DropdownMenuItem>
 
-          <DropdownMenuItem
+            <DropdownMenuItem
             onClick={() => onDuplicate(job)}
             className={menuItemClassName}
           >
@@ -81,16 +73,9 @@ export function ManageJobActions({
             Duplicate
           </DropdownMenuItem>
 
-          <DropdownMenuSeparator className="bg-white/[0.08]" />
+          <DropdownMenuItem></DropdownMenuItem>
 
-          <DropdownMenuItem
-            variant="destructive"
-            onClick={() => onDelete(job)}
-            className="focus:bg-destructive/15"
-          >
-            <Trash2 aria-hidden="true" />
-            Delete
-          </DropdownMenuItem>
+        
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
