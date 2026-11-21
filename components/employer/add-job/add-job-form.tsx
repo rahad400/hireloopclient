@@ -9,8 +9,11 @@ import { BasicInformationFields } from "@/components/employer/add-job/basic-info
 import { DescriptionFields } from "@/components/employer/add-job/description-fields"
 import { FormSection } from "@/components/employer/add-job/form-section"
 import { LocationCompensationFields } from "@/components/employer/add-job/location-compensation-fields"
-import { emptyJobForm, saveJob, type JobFormValues } from "@/lib/employer-job"
-import { jobPrimaryButtonClassName } from "@/lib/job-form-styles"
+import {
+  emptyJobForm,
+  type JobFormValues,
+} from "@/components/employer/manage-jobs/ts/employer-job"
+import { jobPrimaryButtonClassName } from "@/components/employer/add-job/ts/job-form-styles"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import { createJobs } from "@/app/lip/actions/jobs"
@@ -33,8 +36,7 @@ function getMissingFields(values: JobFormValues) {
  * Add Job form.
  *
  * One controlled `values` object holds every field, so submitting sends the
- * exact data the user typed. Jobs are stored in localStorage and the browser
- * then returns to the Manage Jobs page.
+ * exact data the user typed to the jobs API and then returns to Manage Jobs.
  */
 export function AddJobForm() {
   const router = useRouter()
@@ -61,14 +63,21 @@ export function AddJobForm() {
     setErrorMessage(null)
     setIsSaving(true)
 
-    const job = saveJob(values)
-    toast.success("Job published", {
-      description: `${job.title} is now live.`,
-    })
-    router.push("/employer/jobs")
-    
-    const result = createJobs(job)
-    console.log(result)
+    try {
+      await createJobs(values)
+
+      toast.success("Job published", {
+        description: `${values.title} is now live.`,
+      })
+      router.push("/employer/jobs")
+    } catch (cause) {
+      const message =
+        cause instanceof Error ? cause.message : "Could not publish job."
+
+      setIsSaving(false)
+      setErrorMessage(message)
+      toast.error("Could not publish job", { description: message })
+    }
   }
 
   return (

@@ -2,7 +2,7 @@
 
 import { ChevronDown } from "lucide-react"
 
-import { jobSelectClassName } from "@/lib/job-form-styles"
+import { jobSelectClassName } from "@/components/employer/add-job/ts/job-form-styles"
 import { cn } from "cn"
 
 /** Native select styled to match the Figma dropdowns. */

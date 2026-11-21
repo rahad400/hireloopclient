@@ -1,8 +1,8 @@
 "use client"
 
 import { JobField } from "@/components/employer/add-job/job-field"
-import { jobTextareaClassName } from "@/lib/job-form-styles"
-import type { JobFormValues } from "@/lib/employer-job"
+import { jobTextareaClassName } from "@/components/employer/add-job/ts/job-form-styles"
+import type { JobFormValues } from "@/components/employer/manage-jobs/ts/employer-job"
 
 type DescriptionFieldsProps = {
   values: JobFormValues

@@ -3,7 +3,7 @@ import { MapPin, Users } from "lucide-react"
 import { JobCategoryIcon } from "@/components/employer/manage-jobs/job-category-icon"
 import { ManageJobActions } from "@/components/employer/manage-jobs/manage-job-actions"
 import { JobStatusBadge } from "@/components/employer/manage-jobs/job-status-badge"
-import { panelClassName } from "@/components/employer/manage-jobs/manage-jobs-styles"
+import { panelClassName } from "@/components/employer/manage-jobs/ts/manage-jobs-styles"
 import {
   formatJobDate,
   formatJobLocation,
@@ -12,7 +12,7 @@ import {
   getJobDepartment,
   getJobStatus,
   type EmployerJob,
-} from "@/lib/employer-job"
+} from "@/components/employer/manage-jobs/ts/employer-job"
 import { cn } from "cn"
 
 type ManageJobCardProps = {

@@ -3,11 +3,14 @@
 import { CalendarDays, DollarSign, MapPin } from "lucide-react"
 
 import { JobField } from "@/components/employer/add-job/job-field"
-import { jobInputClassName } from "@/lib/job-form-styles"
+import { jobInputClassName } from "@/components/employer/add-job/ts/job-form-styles"
 import { JobSelect } from "@/components/employer/add-job/job-select"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
-import { salaryFrequencyOptions, type JobFormValues } from "@/lib/employer-job"
+import {
+  salaryFrequencyOptions,
+  type JobFormValues,
+} from "@/components/employer/manage-jobs/ts/employer-job"
 
 type LocationCompensationFieldsProps = {
   values: JobFormValues

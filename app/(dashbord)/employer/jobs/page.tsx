@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
-import { ManageJobsContent } from "@/components/employer/manage-jobs/manage-jobs-content"
-import { ManageJobsHeader } from "@/components/employer/manage-jobs/manage-jobs-header"
+import { ManageJobsContent } from "@/components/employer/manage-jobs/manage/manage-jobs-content"
+import { ManageJobsHeader } from "@/components/employer/manage-jobs/manage/manage-jobs-header"
 
 export const metadata: Metadata = {
   title: "Manage Job Posts | HireLoop",

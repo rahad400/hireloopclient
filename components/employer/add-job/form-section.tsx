@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 
-import { jobCardClassName } from "@/lib/job-form-styles"
+import { jobCardClassName } from "@/components/employer/add-job/ts/job-form-styles"
 import { cn } from "cn"
 
 /** Numbered card that groups one part of the job form. */

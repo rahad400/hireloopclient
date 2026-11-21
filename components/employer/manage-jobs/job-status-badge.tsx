@@ -1,6 +1,6 @@
 import { cn } from "cn"
 
-import type { JobStatus } from "@/lib/employer-job"
+import type { JobStatus } from "@/components/employer/manage-jobs/ts/employer-job"
 
 /** Active (green) or Expired (muted) pill from the job post table. */
 export function JobStatusBadge({

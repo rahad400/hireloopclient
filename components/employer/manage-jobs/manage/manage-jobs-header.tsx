@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { ChevronRight, Plus } from "lucide-react"
 
-import { primaryButtonClassName } from "@/components/employer/manage-jobs/manage-jobs-styles"
+import { primaryButtonClassName } from "@/components/employer/manage-jobs/ts/manage-jobs-styles"
 import { Button } from "@/components/ui/button"
 
 /** Breadcrumb, page title and the purple "New Job Post" action. */

@@ -4,7 +4,7 @@ import { Briefcase, Plus } from "lucide-react"
 import {
   panelClassName,
   primaryButtonClassName,
-} from "@/components/employer/manage-jobs/manage-jobs-styles"
+} from "@/components/employer/manage-jobs/ts/manage-jobs-styles"
 import { Button } from "@/components/ui/button"
 import { cn } from "cn"
 

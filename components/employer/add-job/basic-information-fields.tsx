@@ -3,11 +3,14 @@
 import { Building2 } from "lucide-react"
 
 import { JobField } from "@/components/employer/add-job/job-field"
-import { jobInputClassName } from "@/lib/job-form-styles"
+import { jobInputClassName } from "@/components/employer/add-job/ts/job-form-styles"
 import { JobSelect } from "@/components/employer/add-job/job-select"
 import { JobTypeSelector } from "@/components/employer/add-job/job-type-selector"
 import { Input } from "@/components/ui/input"
-import { jobCategoryOptions, type JobFormValues } from "@/lib/employer-job"
+import {
+  jobCategoryOptions,
+  type JobFormValues,
+} from "@/components/employer/manage-jobs/ts/employer-job"
 
 type BasicInformationFieldsProps = {
   values: JobFormValues

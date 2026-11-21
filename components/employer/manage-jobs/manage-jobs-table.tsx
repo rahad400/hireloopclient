@@ -7,7 +7,7 @@ import {
   panelClassName,
   tableCellClassName,
   tableHeadClassName,
-} from "@/components/employer/manage-jobs/manage-jobs-styles"
+} from "@/components/employer/manage-jobs/ts/manage-jobs-styles"
 import {
   Table,
   TableBody,
@@ -24,7 +24,7 @@ import {
   getJobDepartment,
   getJobStatus,
   type EmployerJob,
-} from "@/lib/employer-job"
+} from "@/components/employer/manage-jobs/ts/employer-job"
 import { cn } from "cn"
 
 type ManageJobsTableProps = {
@@ -84,7 +84,7 @@ export function ManageJobsTable({
 
             return (
               <TableRow
-                key={job.id}
+                key={job._id}
                 className="h-[68px] border-white/[0.06] hover:bg-white/[0.02]"
               >
                 <TableCell className={tableCellClassName}>

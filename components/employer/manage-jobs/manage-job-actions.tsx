@@ -6,7 +6,7 @@ import {
   iconButtonClassName,
   kebabButtonClassName,
   updateButtonClassName,
-} from "@/components/employer/manage-jobs/manage-jobs-styles"
+} from "@/components/employer/manage-jobs/ts/manage-jobs-styles"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import type { EmployerJob } from "@/lib/employer-job"
+import type { EmployerJob } from "@/components/employer/manage-jobs/ts/employer-job"
 
 type ManageJobActionsProps = {
   job: EmployerJob

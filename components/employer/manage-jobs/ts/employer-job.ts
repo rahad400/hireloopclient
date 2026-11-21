@@ -1,5 +1,3 @@
-import { demoJobs } from "@/lib/demo-jobs"
-
 export type JobType = "Full-time" | "Part-time" | "Contract" | "Internship"
 
 export type JobFormValues = {
@@ -18,7 +16,7 @@ export type JobFormValues = {
 }
 
 export type EmployerJob = JobFormValues & {
-  id: string
+  _id: string
   createdAt: string
   applicants: number
 }
@@ -65,14 +63,7 @@ export const emptyJobForm: JobFormValues = {
   requirements: "",
 }
 
-const STORAGE_KEY = "hireloop:job-posts"
-const JOBS_CHANGED_EVENT = "hireloop:job-posts-changed"
-const EMPTY_JOBS: EmployerJob[] = []
 const DAY_MS = 86_400_000
-
-/** Demo metadata that is not part of the Add Job form. */
-const applicantsBySeed = [34, 10, 12, 27, 8, 6]
-const postedDaysAgoBySeed = [2, 9, 5, 5, 5, 4]
 
 const departmentByCategory: Record<string, string> = {
   "Engineering & Tech": "Engineering",
@@ -83,8 +74,6 @@ const departmentByCategory: Record<string, string> = {
   Operations: "Operations",
   Other: "General",
 }
-
-let cachedJobs: EmployerJob[] | null = null
 
 /** Short department label shown under the job title. */
 export function getJobDepartment(job: JobFormValues) {
@@ -168,92 +157,10 @@ export function getJobCompensation(job: JobFormValues) {
   }
 }
 
-function readJobs(): EmployerJob[] {
-  try {
-    const stored = window.localStorage.getItem(STORAGE_KEY)
-    if (!stored) return EMPTY_JOBS
-
-    const parsed = JSON.parse(stored) as unknown
-    return Array.isArray(parsed) ? (parsed as EmployerJob[]) : EMPTY_JOBS
-  } catch {
-    return EMPTY_JOBS
-  }
-}
-
-/** Write the demo jobs once, so the table is never empty on a first visit. */
-function seedDemoJobs() {
-  if (window.localStorage.getItem(STORAGE_KEY) !== null) return
-
-  const now = Date.now()
-  const seeded: EmployerJob[] = demoJobs.map((job, index) => ({
-    ...job,
-    id: `${now - index * DAY_MS}-${index + 1}`,
-    createdAt: new Date(
-      now - (postedDaysAgoBySeed[index] ?? 3) * DAY_MS
-    ).toISOString(),
-    applicants: applicantsBySeed[index] ?? 0,
-  }))
-
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(seeded))
-}
-
-/** Jobs published from this browser, newest first. */
-export function getJobs(): EmployerJob[] {
-  if (typeof window === "undefined") return EMPTY_JOBS
-
-  if (cachedJobs === null) {
-    cachedJobs = readJobs()
-  }
-
-  return cachedJobs
-}
-
-/** Snapshot for `useSyncExternalStore`; `null` means "not read yet". */
-export function getJobsSnapshot(): EmployerJob[] | null {
-  return getJobs()
-}
-
-/** Server and hydration snapshot, so the first paint does not mismatch. */
-export function getJobsServerSnapshot(): EmployerJob[] | null {
-  return null
-}
-
-/** Re-render subscribers when a job changes in this tab or another one. */
-export function subscribeToJobs(onChange: () => void) {
-  function handleChange() {
-    cachedJobs = null
-    onChange()
-  }
-
-  window.addEventListener("storage", handleChange)
-  window.addEventListener(JOBS_CHANGED_EVENT, handleChange)
-
-  return () => {
-    window.removeEventListener("storage", handleChange)
-    window.removeEventListener(JOBS_CHANGED_EVENT, handleChange)
-  }
-}
-
-/** Save a form submission and return the stored job. */
-export function saveJob(values: JobFormValues): EmployerJob {
-  const job: EmployerJob = {
-    ...values,
-    id: `${Date.now()}-${Math.round(Math.random() * 1_000_000)}`,
-    createdAt: new Date().toISOString(),
-    applicants: 0,
-  }
-
-  cachedJobs = [job, ...readJobs()]
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(cachedJobs))
-  window.dispatchEvent(new Event(JOBS_CHANGED_EVENT))
-
-  return job
-}
-
-/** Copy one post into a new draft with no applicants yet. */
-export function duplicateJob(job: EmployerJob): EmployerJob {
-  return saveJob({
-    title: `${job.title} (Copy)`,
+/** Strip server-only fields before writing a job back to the API. */
+export function toJobValues(job: JobFormValues): JobFormValues {
+  return {
+    title: job.title,
     company: job.company,
     category: job.category,
     type: job.type,
@@ -265,20 +172,5 @@ export function duplicateJob(job: EmployerJob): EmployerJob {
     frequency: job.frequency,
     responsibilities: job.responsibilities,
     requirements: job.requirements,
-  })
-}
-
-/** Remove a job and notify the Manage Jobs table. */
-export function deleteJob(id: string) {
-  cachedJobs = getJobs().filter((job) => job.id !== id)
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(cachedJobs))
-  window.dispatchEvent(new Event(JOBS_CHANGED_EVENT))
-}
-
-if (typeof window !== "undefined") {
-  try {
-    seedDemoJobs()
-  } catch {
-    // Storage can be unavailable (private mode); the table handles empty data.
   }
 }
