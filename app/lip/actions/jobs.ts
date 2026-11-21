@@ -34,6 +34,7 @@ export async function deleteJobs(id: string): Promise<void> {
 };
 
 
-export const duplicateJob =(job: EmployerJob) =>{
-
+export async function duplicateJob(job: EmployerJob): Promise<void> {
+  const { _id, createdAt, applicants, ...jobData } = job
+  await createJobs(jobData)
 }

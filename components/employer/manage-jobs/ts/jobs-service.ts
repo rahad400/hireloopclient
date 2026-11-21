@@ -44,7 +44,7 @@ function normalizeJob(record: JobRecord): EmployerJob {
   const applicants = Number(record.applicants)
 
   return {
-    id: text(record.id) || text(record._id),
+    _id: text(record.id) || text(record._id),
     title: text(record.title),
     company: text(record.company),
     category: text(record.category),

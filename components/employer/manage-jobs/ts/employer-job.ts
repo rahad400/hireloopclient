@@ -90,7 +90,7 @@ export function getJobStatus(job: EmployerJob): JobStatus {
 
 /** Short public reference like `HL-90210`, derived from the stored id. */
 export function getJobRef(job: EmployerJob) {
-  const digits = job.id.replace(/\D/g, "").slice(-5).padStart(5, "0")
+  const digits = job._id.replace(/\D/g, "").slice(-5).padStart(5, "0")
   return `HL-${digits}`
 }
 

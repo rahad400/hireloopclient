@@ -54,10 +54,11 @@ export function ManageJobsContent() {
     })
   }
 
-  function handleDuplicate(job: EmployerJob) {
-    const copy = duplicateJob(job)
+  async function handleDuplicate(job: EmployerJob) {
+    await duplicateJob(job)
+    await loadJobs()
     toast.success("Job post duplicated", {
-      // description: `${copy.title} was added to the list.`,
+      description: `${job.title} Copy was added to the list.`,
     })
   }
 
