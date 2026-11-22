@@ -1,4 +1,4 @@
-import type { EmployerJob, JobFormValues } from "@/components/employer/manage-jobs/ts/employer-job"
+import type { EmployerJob } from "@/components/employer/manage-jobs/ts/employer-job"
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000"
 
@@ -15,4 +15,15 @@ export default async function getJobs(): Promise<EmployerJob[]> {
   }
 
   return response.json()
+};
+
+export async function detailsJob(id: string): Promise<EmployerJob> {
+  const jobs = await getJobs()
+  const job = jobs.find((item) => item._id === id)
+
+  if (!job) {
+    throw new Error(`Job post with id "${id}" was not found.`)
+  }
+
+  return job
 }

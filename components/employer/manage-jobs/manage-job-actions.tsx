@@ -1,6 +1,7 @@
 "use client"
 
 import { Copy, Eye, MoreVertical, Pencil, Trash2 } from "lucide-react"
+import Link from "next/link"
 
 import {
   
@@ -58,7 +59,9 @@ export function ManageJobActions({
           className="border border-white/[0.08] bg-[#1e1e21] text-[#ededef] shadow-2xl"
         >
           <DropdownMenuItem
-            onClick={() => onEdit(job)}
+            render={
+              <Link href={`/employer/jobs/new/${encodeURIComponent(job._id)}`} />
+            }
             className={menuItemClassName}
           >
             <Eye aria-hidden="true" />
