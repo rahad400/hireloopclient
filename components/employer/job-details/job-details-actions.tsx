@@ -45,9 +45,7 @@ export function JobDetailsActions({ job }: { job: EmployerJob }) {
   const isBusy = pendingAction !== null
 
   function handleEdit() {
-    toast.info("Editing is not available yet", {
-      description: `An edit form for ${job.title} is coming soon.`,
-    })
+    router.push(`/employer/jobs/new/${encodeURIComponent(job._id)}/update`)
   }
 
   async function handleDuplicate() {
