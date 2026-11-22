@@ -6,7 +6,7 @@ export type NavigationLink = {
 }
 
 export const navigationLinks: NavigationLink[] = [
-  { label: "Browse jobs", href: "/browse-jobs", match: "/jobs" },
+  { label: "Browse jobs", href: "/browse-jobs", match: "/browse-jobs" },
   { label: "Companies", href: "/companies", match: "/companies" },
   { label: "Pricing", href: "/pricing", match: "/pricing" },
 ]
