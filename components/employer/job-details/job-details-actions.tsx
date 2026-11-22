@@ -101,7 +101,10 @@ export function JobDetailsActions({ job }: { job: EmployerJob }) {
           type="button"
           onClick={handleEdit}
           disabled={isBusy}
-          className={cn(primaryButtonClassName, "w-full justify-center")}
+          className={cn(
+            primaryButtonClassName,
+            "inline-flex w-full items-center justify-center disabled:cursor-not-allowed disabled:opacity-60"
+          )}
         >
           <Pencil aria-hidden="true" className="size-4" />
           Edit Job
@@ -111,9 +114,10 @@ export function JobDetailsActions({ job }: { job: EmployerJob }) {
           type="button"
           onClick={handleDuplicate}
           disabled={isBusy}
+          aria-busy={pendingAction === "duplicate"}
           className={cn(
             secondaryButtonClassName,
-            "w-full justify-center disabled:cursor-not-allowed disabled:opacity-60"
+            "inline-flex w-full items-center justify-center disabled:cursor-not-allowed disabled:opacity-60"
           )}
         >
           {pendingAction === "duplicate" ? (
@@ -138,32 +142,34 @@ export function JobDetailsActions({ job }: { job: EmployerJob }) {
             }
           />
 
-          <AlertDialogContent className="border border-white/[0.08] bg-[#17171a] text-[#ededef]">
+          <AlertDialogContent
+            size="sm"
+            className="rounded-2xl border border-white/[0.08] bg-[#17171a] text-[#ededef] shadow-[0_24px_70px_-24px_rgba(0,0,0,0.85)] sm:max-w-sm"
+          >
             <AlertDialogHeader>
-              <AlertDialogMedia className="bg-[#f97066]/10 text-[#f97066]">
+              <AlertDialogMedia className="bg-[#f97066]/10 text-[#f97066] ring-1 ring-[#f97066]/20">
                 <Trash2 />
               </AlertDialogMedia>
-              <AlertDialogTitle className="text-[#ededef]">
-                Delete this job post?
+
+              <AlertDialogTitle className="font-semibold tracking-tight text-[#ededef]">
+                Delete job post?
               </AlertDialogTitle>
-              <AlertDialogDescription className="text-[#8b8b95]">
+
+              <AlertDialogDescription className="text-[13px] leading-5 text-[#8b8b95]">
                 “{job.title}” will be permanently removed from your listings.
-                Applications and job details cannot be recovered.
+                This action cannot be undone.
               </AlertDialogDescription>
             </AlertDialogHeader>
 
-            <AlertDialogFooter>
-              <AlertDialogCancel
-                variant="outline"
-                className="border-white/[0.08] bg-[#17171b] text-[#d6d6dc] hover:bg-white/[0.06] hover:text-[#ededef]"
-              >
+            <AlertDialogFooter className="-mx-4 -mb-4 border-t border-white/[0.06] bg-white/[0.02] p-4">
+              <AlertDialogCancel className="h-9 border-white/[0.08] bg-[#17171b] text-[13px] font-medium text-[#d6d6dc] hover:bg-white/[0.06] hover:text-[#ededef]">
                 Cancel
               </AlertDialogCancel>
 
               <AlertDialogAction
                 variant="destructive"
                 onClick={handleDelete}
-                className="bg-[#f97066]/15 text-[#f97066] hover:bg-[#f97066]/25"
+                className="h-9 border border-[#f97066]/20 bg-[#f97066]/15 text-[13px] font-medium text-[#f97066] hover:bg-[#f97066]/25 hover:text-[#ff9b93]"
               >
                 Delete Job
               </AlertDialogAction>

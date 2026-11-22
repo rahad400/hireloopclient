@@ -18,6 +18,8 @@ export type DashboardNavItem = {
   label: string
   href: string
   icon: LucideIcon
+  /** `exact` stops child routes from keeping this item active. */
+  match?: "prefix" | "exact"
 }
 
 export type DashboardProfile = {
@@ -79,7 +81,12 @@ export const dashboardRoles: Record<DashboardRole, DashboardRoleConfig> = {
       { label: "Dashboard", href: "/employer", icon: LayoutDashboard },
       { label: "My Company", href: "/employer/company", icon: Building2 },
       { label: "Manage Jobs", href: "/employer/jobs", icon: Briefcase },
-      { label: "Add Job", href: "/employer/jobs/new", icon: PlusCircle },
+      {
+        label: "Add Job",
+        href: "/employer/jobs/new",
+        icon: PlusCircle,
+        match: "exact",
+      },
       { label: "Applications", href: "/employer/applications", icon: FileText },
       { label: "Settings", href: "/employer/settings", icon: Settings },
       { label: "Home", href: "/", icon: HomeIcon },
@@ -129,10 +136,20 @@ export function getDashboardHome(role?: string | null) {
 }
 
 /**
- * Only the role root is an exact match; every other item also matches its own
- * child routes so `/candidate/jobs/42` still highlights "Jobs".
+ * Only the role root is an exact match by default; every other item also
+ * matches its own child routes so `/candidate/jobs/42` still highlights
+ * "Jobs". Items marked `match: "exact"` (like Add Job) deliberately stop at
+ * their own URL, so `/employer/jobs/new/42` falls back to "Manage Jobs".
  */
-export function isDashboardNavItemActive(pathname: string, href: string) {
+export function isDashboardNavItemActive(
+  pathname: string,
+  href: string,
+  match: DashboardNavItem["match"] = "prefix"
+) {
+  if (match === "exact") {
+    return pathname === href
+  }
+
   const isRoleRoot = href.split("/").filter(Boolean).length === 1
 
   return isRoleRoot

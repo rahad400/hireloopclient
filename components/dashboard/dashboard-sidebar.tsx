@@ -39,7 +39,7 @@ export function DashboardSidebar() {
     ? session.user.role
     : routeRole
   const config = dashboardRoles[role]
-const { ctaLabel, ctaHref } = config
+  const { ctaLabel, ctaHref } = config
   const profile: DashboardProfile = {
     ...config.profile,
     name: session?.user?.name || config.profile.name,
@@ -47,9 +47,9 @@ const { ctaLabel, ctaHref } = config
   }
 
   // Nested routes like `/employer/jobs/new` match two links; keep the most
-  // specific one highlighted.
+  // specific one highlighted. Exact-only items opt out of child routes.
   const activeHref = config.items
-    .filter((item) => isDashboardNavItemActive(pathname, item.href))
+    .filter((item) => isDashboardNavItemActive(pathname, item.href, item.match))
     .sort((a, b) => b.href.length - a.href.length)[0]?.href
 
   return (
@@ -79,7 +79,11 @@ const { ctaLabel, ctaHref } = config
       </SidebarContent>
 
       <SidebarFooter className="gap-0 px-3 pt-0 pb-4">
-        <DashboardSidebarFooter ctaLabel={config.ctaLabel} profile={profile}  ctaHref={config.ctaHref} />
+        <DashboardSidebarFooter
+          ctaLabel={config.ctaLabel}
+          profile={profile}
+          ctaHref={config.ctaHref}
+        />
       </SidebarFooter>
     </Sidebar>
   )
