@@ -1,17 +1,9 @@
+import getJobs from "@/app/lip/api/jobs"
+import { BrowseJobsContent } from "@/components/browse-jobs/browse-jobs-content"
 
-const BrowseJobsPage = async ({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string[] | string | undefined }>
-}) => {
-    const query = await searchParams
-    const queryString =  new URLSearchParams (query as Record<string,string>).toString()
-    console.log(queryString)
-  return (
-    <div>
-      <h1>browse jobs page</h1>
-    </div>
-  )
+/** Public job board at `/browse-jobs`. */
+export default async function BrowseJobsPage() {
+  const jobs = await getJobs()
+
+  return <BrowseJobsContent jobs={jobs} />
 }
-
-export default BrowseJobsPage
