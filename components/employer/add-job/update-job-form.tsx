@@ -1,13 +1,12 @@
 "use client"
 
 import { useState, type FormEvent } from "react"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, ArrowRight, ChevronRight } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { toast } from "sonner"
 
-// Your existing action already sends PATCH to /jobs/:id.
-import updateJobs from "@/app/lip/actions/update"
+import updateJob from "@/app/lip/actions/update"
+import { AddJobHeader } from "@/components/employer/add-job/add-job-header"
 import { BasicInformationFields } from "@/components/employer/add-job/basic-information-fields"
 import { DescriptionFields } from "@/components/employer/add-job/description-fields"
 import { FormSection } from "@/components/employer/add-job/form-section"
@@ -20,9 +19,21 @@ import {
 } from "@/components/employer/manage-jobs/ts/employer-job"
 import { Button } from "@/components/ui/button"
 
+function getMissingFields(values: JobFormValues) {
+  const missing: string[] = []
+
+  if (!values.title.trim()) missing.push("job title")
+  if (!values.company.trim()) missing.push("company name")
+  if (!values.category) missing.push("job category")
+  if (!values.location.trim()) missing.push("job location")
+  if (!values.responsibilities.trim()) missing.push("key responsibilities")
+  if (!values.requirements.trim()) missing.push("qualifications")
+
+  return missing
+}
+
 export function UpdateJobForm({ job }: { job: EmployerJob }) {
   const router = useRouter()
-  // toJobValues keeps only the 12 form fields, so _id is never sent.
   const [values, setValues] = useState<JobFormValues>(() => toJobValues(job))
   const [isSaving, setIsSaving] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -37,59 +48,40 @@ export function UpdateJobForm({ job }: { job: EmployerJob }) {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    setIsSaving(true)
+
+    const missing = getMissingFields(values)
+    if (missing.length > 0) {
+      setErrorMessage(`Please add: ${missing.join(", ")}.`)
+      return
+    }
+
     setErrorMessage(null)
+    setIsSaving(true)
 
     try {
-      await updateJobs(job._id, values)
-      toast.success("Job post updated", {
-        description: `${values.title} was updated.`,
+      await updateJob(job._id, values)
+      toast.success("Job updated", {
+        description: `${values.title} was updated successfully.`,
       })
-      router.push(`/employer/jobs/new/${encodeURIComponent(job._id)}`)
+      router.push("/employer/jobs")
     } catch (cause) {
       const message =
-        cause instanceof Error ? cause.message : "Could not update job post."
-      setErrorMessage(message)
-      toast.error("Could not update job post", { description: message })
-    } finally {
+        cause instanceof Error ? cause.message : "Could not update job."
+
       setIsSaving(false)
+      setErrorMessage(message)
+      toast.error("Could not update job", { description: message })
     }
   }
 
   return (
     <form
+      noValidate
       onSubmit={handleSubmit}
-      aria-label="Update job post"
+      aria-label="Update job"
       className="mx-auto flex w-full max-w-[984px] flex-col gap-6"
     >
-      <header className="flex flex-col gap-4 border-b border-white/[0.08] pb-6">
-        <nav
-          aria-label="Breadcrumb"
-          className="flex items-center gap-1.5 text-xs font-medium text-[#a0a0ab]"
-        >
-          <Link href="/employer/jobs" className="hover:text-white">
-            Manage Jobs
-          </Link>
-          <ChevronRight aria-hidden="true" className="size-3" />
-          <Link
-            href={`/employer/jobs/new/${encodeURIComponent(job._id)}`}
-            className="hover:text-white"
-          >
-            Job Details
-          </Link>
-          <ChevronRight aria-hidden="true" className="size-3" />
-          <span className="text-[#c3c0ff]">Edit Job</span>
-        </nav>
-
-        <div>
-          <h1 className="text-2xl leading-tight font-medium text-white sm:text-[32px] sm:leading-[42px]">
-            Edit Job Post
-          </h1>
-          <p className="mt-1 max-w-xl text-[13px] leading-5 text-[#a0a0ab]">
-            Update the details for {job.title}.
-          </p>
-        </div>
-      </header>
+      <AddJobHeader isSaving={isSaving} mode="update" />
 
       {errorMessage && (
         <p
@@ -115,24 +107,14 @@ export function UpdateJobForm({ job }: { job: EmployerJob }) {
         </FormSection>
       </div>
 
-      <div className="flex items-center justify-between">
-        <Button
-          render={
-            <Link href={`/employer/jobs/new/${encodeURIComponent(job._id)}`} />
-          }
-          nativeButton={false}
-        >
-          <ArrowLeft aria-hidden="true" />
-          Cancel
-        </Button>
-
+      <div className="flex cursor-pointer items-center justify-end">
         <Button
           type="submit"
           disabled={isSaving}
           aria-busy={isSaving}
           className={jobPrimaryButtonClassName}
         >
-          {isSaving ? "Saving..." : "Save Changes"}
+          {isSaving ? "Updating..." : "Update Job"}
           <ArrowRight aria-hidden="true" />
         </Button>
       </div>

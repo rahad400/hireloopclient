@@ -1,12 +1,9 @@
 import { SearchX } from "lucide-react"
 
-import {
-  panelClassName,
-  secondaryButtonClassName,
-} from "@/components/employer/manage-jobs/ts/manage-jobs-styles"
+import { secondaryButtonClassName } from "@/components/employer/manage-jobs/ts/manage-jobs-styles"
 import type { JobStatusFilter } from "@/components/employer/manage-jobs/ts/employer-job"
 import { Button } from "@/components/ui/button"
-import { cn } from "cn"
+import { EmptyState } from "@/components/shared/empty-state"
 
 type ManageJobsNoResultsProps = {
   query: string
@@ -30,32 +27,21 @@ export function ManageJobsNoResults({
         : `There are no ${status.toLowerCase()} job posts right now.`
 
   return (
-    <div
-      className={cn(
-        panelClassName,
-        "flex flex-col items-center gap-4 px-6 py-16 text-center"
-      )}
-    >
-      <span className="flex size-12 items-center justify-center rounded-xl bg-[#1a1a1f] text-[#a0a0ab]">
-        <SearchX aria-hidden="true" className="size-5" />
-      </span>
-
-      <div className="flex flex-col gap-1">
-        <p className="text-base font-medium text-[#ededef]">
-          No matching job posts
-        </p>
-        <p className="max-w-sm text-[13px] leading-5 text-[#8b8b95]">
-          {message}
-        </p>
-      </div>
-
-      <Button
-        type="button"
-        onClick={onClear}
-        className={secondaryButtonClassName}
-      >
-        Clear filters
-      </Button>
-    </div>
+    <EmptyState
+      icon={SearchX}
+      iconClassName="bg-[#1a1a1f] text-[#a0a0ab]"
+      title="No matching job posts"
+      description={message}
+      containerClassName="flex flex-col items-center gap-4 px-6 py-16 text-center"
+      action={
+        <Button
+          type="button"
+          onClick={onClear}
+          className={secondaryButtonClassName}
+        >
+          Clear filters
+        </Button>
+      }
+    />
   )
 }

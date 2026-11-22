@@ -1,11 +1,10 @@
 import { Briefcase, CalendarX2, Layers } from "lucide-react"
 
-import { panelClassName } from "@/components/employer/manage-jobs/ts/manage-jobs-styles"
+import { StatCard } from "@/components/shared/stat-card"
 import {
   getJobStatus,
   type EmployerJob,
 } from "@/components/employer/manage-jobs/ts/employer-job"
-import { cn } from "cn"
 
 type ManageJobsStatsProps = {
   jobs: EmployerJob[] | null
@@ -48,35 +47,16 @@ export function ManageJobsStats({ jobs }: ManageJobsStatsProps) {
 
   return (
     <div className="grid gap-3 sm:grid-cols-3">
-      {stats.map(({ label, value, icon: Icon, iconClassName }) => (
-        <article
+      {stats.map(({ label, value, icon, iconClassName }) => (
+        <StatCard
           key={label}
-          className={cn(panelClassName, "flex items-center gap-3 px-4 py-3.5")}
-        >
-          <span
-            aria-hidden="true"
-            className={cn(
-              "flex size-9 shrink-0 items-center justify-center rounded-lg",
-              iconClassName
-            )}
-          >
-            <Icon className="size-4" />
-          </span>
-
-          <div className="flex min-w-0 flex-col">
-            <p className="text-[10px] font-medium tracking-[0.08em] text-[#8b8b95] uppercase">
-              {label}
-            </p>
-
-            {isLoading ? (
-              <span className="mt-1 block h-6 w-9 animate-pulse rounded bg-white/[0.08]" />
-            ) : (
-              <p className="text-lg leading-7 font-semibold text-[#ededef]">
-                {value}
-              </p>
-            )}
-          </div>
-        </article>
+          label={label}
+          value={value}
+          icon={icon}
+          iconClassName={iconClassName}
+          labelClassName="text-[10px] font-medium tracking-[0.08em] text-[#8b8b95] uppercase"
+          loading={isLoading}
+        />
       ))}
     </div>
   )

@@ -1,9 +1,6 @@
 import { CalendarClock, CalendarPlus, Users, Wallet } from "lucide-react"
 
-import {
-  detailLabelClassName,
-  detailPanelClassName,
-} from "@/components/employer/job-details/ts/job-details-styles"
+import { StatCard } from "@/components/shared/stat-card"
 import {
   formatSalaryFrequency,
   getDeadlineNote,
@@ -14,7 +11,6 @@ import {
   getJobCompensation,
   type EmployerJob,
 } from "@/components/employer/manage-jobs/ts/employer-job"
-import { cn } from "cn"
 
 /** The four highlight counters at the top of the job profile. */
 export function JobOverviewCards({ job }: { job: EmployerJob }) {
@@ -55,31 +51,16 @@ export function JobOverviewCards({ job }: { job: EmployerJob }) {
 
   return (
     <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-      {cards.map(({ label, value, hint, icon: Icon, iconClassName }) => (
-        <article
+      {cards.map(({ label, value, hint, icon, iconClassName }) => (
+        <StatCard
           key={label}
-          className={cn(detailPanelClassName, "flex items-start gap-3 p-4")}
-        >
-          <span
-            aria-hidden="true"
-            className={cn(
-              "flex size-9 shrink-0 items-center justify-center rounded-lg",
-              iconClassName
-            )}
-          >
-            <Icon className="size-4" />
-          </span>
-
-          <div className="flex min-w-0 flex-col gap-0.5">
-            <p className={detailLabelClassName}>{label}</p>
-            <p className="truncate text-[17px] leading-6 font-semibold text-[#ededef]">
-              {value}
-            </p>
-            <p className="truncate text-[11px] leading-4 text-[#8b8b95]">
-              {hint}
-            </p>
-          </div>
-        </article>
+          label={label}
+          value={value}
+          hint={hint}
+          icon={icon}
+          iconClassName={iconClassName}
+          variant="detail"
+        />
       ))}
     </div>
   )

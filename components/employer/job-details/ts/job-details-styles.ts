@@ -5,14 +5,14 @@
  * the profile page a slightly roomier rhythm.
  */
 
-export const detailPanelClassName =
-  "overflow-hidden rounded-xl border border-white/[0.07] bg-[#0c0c0f]"
+/** Re-exported so existing `detailPanelClassName` imports keep working. */
+export { dashboardPanelClassName as detailPanelClassName } from "@/lib/styles/dashboard"
 
 export const detailSectionTitleClassName =
   "text-[15px] leading-6 font-medium text-[#ededef]"
 
-export const detailLabelClassName =
-  "text-[10px] font-medium tracking-[0.08em] text-[#6b6b76] uppercase"
+/** Re-exported so existing `detailLabelClassName` imports keep working. */
+export { dashboardLabelClassName as detailLabelClassName } from "@/lib/styles/dashboard"
 
 export const detailValueClassName = "text-[13px] leading-5 text-[#d6d6dc]"
 

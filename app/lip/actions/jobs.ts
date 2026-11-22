@@ -1,4 +1,4 @@
-import { EmployerJob, JobFormValues } from "@/components/employer/manage-jobs/ts/employer-job"
+import type { EmployerJob, JobFormValues } from "@/components/employer/manage-jobs/ts/employer-job"
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000"
 
@@ -17,7 +17,7 @@ export async function createJobs(data: JobFormValues): Promise<void> {
     )
   }
 
-  console.log(response,data)
+  // console.log(response,data)
 };
 
 
@@ -26,12 +26,14 @@ export async function deleteJobs(id: string): Promise<void> {
     method: "DELETE",
   })
 
-  if (!response.ok) {
+  // Deleting an already-removed job is still a successful UI operation.
+  if (!response.ok && response.status !== 404) {
     throw new Error(
       `Could not delete job post (${response.status} ${response.statusText}).`
     )
   }
 };
+
 
 
 export async function duplicateJob(job: EmployerJob): Promise<void> {

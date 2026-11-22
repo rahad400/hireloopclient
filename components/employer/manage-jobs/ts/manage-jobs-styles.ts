@@ -4,8 +4,8 @@
  * Dark panel, 10px uppercase column labels and compact purple actions.
  */
 
-export const panelClassName =
-  "overflow-hidden rounded-xl border border-white/[0.07] bg-[#0c0c0f]"
+/** Re-exported so existing `panelClassName` imports keep working. */
+export { dashboardPanelClassName as panelClassName } from "@/lib/styles/dashboard"
 
 export const primaryButtonClassName =
   "h-10 gap-2 rounded-xl bg-brand px-4 text-[13px] font-medium text-white shadow-[0_10px_24px_-14px_rgba(92,83,254,0.9)] hover:bg-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60"

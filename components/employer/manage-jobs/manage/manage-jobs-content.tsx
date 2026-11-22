@@ -121,9 +121,7 @@ export function ManageJobsContent() {
   }
 
   function handleEdit(job: EmployerJob) {
-    toast.info("Editing is not available yet", {
-      description: `An edit form for ${job.title} is coming soon.`,
-    })
+    router.push(`/employer/jobs/new/${encodeURIComponent(job._id)}/update`)
   }
 
   async function handleDuplicate(job: EmployerJob) {

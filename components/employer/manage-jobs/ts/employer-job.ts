@@ -1,30 +1,22 @@
-export type JobType = "Full-time" | "Part-time" | "Contract" | "Internship"
+import type {
+  EmployerJob,
+  JobFormValues,
+  JobStatus,
+  JobStatusFilter,
+  JobType,
+} from "@/lib/types/job"
 
-export type JobFormValues = {
-  title: string
-  company: string
-  category: string
-  type: JobType
-  isRemote: boolean
-  location: string
-  deadline: string
-  minSalary: string
-  maxSalary: string
-  frequency: string
-  responsibilities: string
-  requirements: string
-}
-
-export type EmployerJob = JobFormValues & {
-  _id: string
-  createdAt: string
-  applicants: number
-}
-
-export type JobStatus = "Active" | "Expired"
-
-/** `all` shows every post; the other values match `JobStatus`. */
-export type JobStatusFilter = "all" | JobStatus
+/**
+ * The domain types now live in `lib/types/job.ts`.
+ * Re-exporting them here keeps every existing import path working.
+ */
+export type {
+  EmployerJob,
+  JobFormValues,
+  JobStatus,
+  JobStatusFilter,
+  JobType,
+} from "@/lib/types/job"
 
 export const jobStatusFilterOptions: {
   value: JobStatusFilter
