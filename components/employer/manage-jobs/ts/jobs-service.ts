@@ -57,6 +57,10 @@ function normalizeJob(record: JobRecord): EmployerJob {
     frequency: text(record.frequency),
     responsibilities: text(record.responsibilities),
     requirements: text(record.requirements),
+    status:
+      record.status === "Active" || record.status === "Expired"
+        ? record.status
+        : "Active",
     createdAt: text(record.createdAt),
     applicants: Number.isFinite(applicants) && applicants > 0 ? applicants : 0,
   }
@@ -77,6 +81,10 @@ export function pickJobValues(record: JobRecord): JobFormValues {
     frequency: text(record.frequency),
     responsibilities: text(record.responsibilities),
     requirements: text(record.requirements),
+    status:
+      record.status === "Active" || record.status === "Expired"
+        ? record.status
+        : "Active",
   }
 }
 

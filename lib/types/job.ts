@@ -16,6 +16,8 @@ export type JobFormValues = {
   frequency: string
   responsibilities: string
   requirements: string
+  status:JobStatus
+ 
 }
 
 /** A stored job: the form fields plus server-generated values. */

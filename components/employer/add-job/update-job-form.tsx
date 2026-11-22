@@ -10,12 +10,17 @@ import { AddJobHeader } from "@/components/employer/add-job/add-job-header"
 import { BasicInformationFields } from "@/components/employer/add-job/basic-information-fields"
 import { DescriptionFields } from "@/components/employer/add-job/description-fields"
 import { FormSection } from "@/components/employer/add-job/form-section"
+import { JobField } from "@/components/employer/add-job/job-field"
+import { JobSelect } from "@/components/employer/add-job/job-select"
 import { LocationCompensationFields } from "@/components/employer/add-job/location-compensation-fields"
 import { jobPrimaryButtonClassName } from "@/components/employer/add-job/ts/job-form-styles"
+import { secondaryButtonClassName } from "@/components/employer/manage-jobs/ts/manage-jobs-styles"
 import {
+  getJobStatus,
   toJobValues,
   type EmployerJob,
   type JobFormValues,
+  type JobStatus,
 } from "@/components/employer/manage-jobs/ts/employer-job"
 import { Button } from "@/components/ui/button"
 
@@ -32,9 +37,14 @@ function getMissingFields(values: JobFormValues) {
   return missing
 }
 
+const statusOptions: JobStatus[] = ["Active", "Expired"]
+
 export function UpdateJobForm({ job }: { job: EmployerJob }) {
   const router = useRouter()
-  const [values, setValues] = useState<JobFormValues>(() => toJobValues(job))
+  const [values, setValues] = useState<JobFormValues>(() => ({
+    ...toJobValues(job),
+    status: getJobStatus(job),
+  }))
   const [isSaving, setIsSaving] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
@@ -96,6 +106,23 @@ export function UpdateJobForm({ job }: { job: EmployerJob }) {
       <div className="flex flex-col gap-5">
         <FormSection title="1. Basic Information">
           <BasicInformationFields values={values} onChange={update} />
+
+          <JobField label="Job Status" htmlFor="job-status">
+            <JobSelect
+              id="job-status"
+              name="status"
+              value={values.status}
+              onChange={(event) =>
+                update("status", event.target.value as JobStatus)
+              }
+            >
+              {statusOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </JobSelect>
+          </JobField>
         </FormSection>
 
         <FormSection title="2. Location, Compensation & Timeline">
@@ -107,7 +134,17 @@ export function UpdateJobForm({ job }: { job: EmployerJob }) {
         </FormSection>
       </div>
 
-      <div className="flex cursor-pointer items-center justify-end">
+      <div className="flex cursor-pointer items-center justify-end gap-3">
+        <Button
+          type="button"
+          onClick={() =>
+            router.push(`/employer/jobs/new/${encodeURIComponent(job._id)}`)
+          }
+          className={secondaryButtonClassName}
+        >
+          Cancel
+        </Button>
+
         <Button
           type="submit"
           disabled={isSaving}

@@ -65,6 +65,7 @@ export const emptyJobForm: JobFormValues = {
   frequency: "per hour",
   responsibilities: "",
   requirements: "",
+  status: "Active",
 }
 
 const DAY_MS = 86_400_000
@@ -84,8 +85,10 @@ export function getJobDepartment(job: JobFormValues) {
   return departmentByCategory[job.category] ?? job.category ?? "General"
 }
 
-/** A job is expired once its application deadline has passed. */
+/** Use the stored status when present; older posts fall back to the deadline. */
 export function getJobStatus(job: EmployerJob): JobStatus {
+  if (job.status === "Active" || job.status === "Expired") return job.status
+
   if (!job.deadline) return "Active"
 
   const deadline = new Date(`${job.deadline}T23:59:59`).getTime()
@@ -176,5 +179,6 @@ export function toJobValues(job: JobFormValues): JobFormValues {
     frequency: job.frequency,
     responsibilities: job.responsibilities,
     requirements: job.requirements,
+    status: job.status,
   }
 }
