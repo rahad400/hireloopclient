@@ -1,6 +1,6 @@
 "use client"
 
-import { CalendarDays, DollarSign, MapPin } from "lucide-react"
+import { CalendarDays, MapPin } from "lucide-react"
 
 import { JobField } from "@/components/employer/add-job/job-field"
 import { jobInputClassName } from "@/components/employer/add-job/ts/job-form-styles"
@@ -19,6 +19,9 @@ type LocationCompensationFieldsProps = {
     value: JobFormValues[K]
   ) => void
 }
+
+const currencyPrefixClassName =
+  "pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-[15px] font-medium text-[#a0a0ab]"
 
 /** Section 2: remote toggle, location, deadline and salary range. */
 export function LocationCompensationFields({
@@ -96,10 +99,9 @@ export function LocationCompensationFields({
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <JobField label="Min Salary / Rate" htmlFor="job-min-salary">
           <div className="relative">
-            <DollarSign
-              aria-hidden="true"
-              className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-[#a0a0ab]"
-            />
+            <span aria-hidden="true" className={currencyPrefixClassName}>
+              €
+            </span>
             <Input
               id="job-min-salary"
               name="minSalary"
@@ -115,10 +117,9 @@ export function LocationCompensationFields({
 
         <JobField label="Max Salary / Rate" htmlFor="job-max-salary">
           <div className="relative">
-            <DollarSign
-              aria-hidden="true"
-              className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-[#a0a0ab]"
-            />
+            <span aria-hidden="true" className={currencyPrefixClassName}>
+              €
+            </span>
             <Input
               id="job-max-salary"
               name="maxSalary"
