@@ -2,8 +2,8 @@ import type { EmployerJob } from "@/components/employer/manage-jobs/ts/employer-
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000"
 
-export default async function getJobs(): Promise<EmployerJob[]> {
-  const response = await fetch(`${BASE_URL}/jobs`, {
+export default async function getJobs(query = ''): Promise<EmployerJob[]> {
+  const response = await fetch(`${BASE_URL}/jobs?${query}`, {
     method: "GET",
     cache: "no-store",
   })
