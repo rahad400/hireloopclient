@@ -96,7 +96,7 @@ export function BrowseJobsContent({ jobs, sort }: BrowseJobsContentProps) {
         onSortChange={handleSortChange}
       />
 
-      <div className="mx-auto w-full max-w-[1320px] px-4 py-6 pb-10 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-[1600px] px-4 py-6 pb-10 sm:px-6 lg:px-8">
         <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
           <aside className="hidden h-fit rounded-xl border border-white/[0.07] bg-night-soft p-4 lg:sticky lg:top-60 lg:block lg:max-h-[calc(100vh-16rem)] lg:self-start lg:overflow-y-auto">
             <BrowseJobsFilters key={filterResetKey} {...filterProps} />

@@ -42,11 +42,20 @@ export async function duplicateJob(job: EmployerJob): Promise<void> {
 }
 
 
-export const getDetailsId = async(id:string)=>{
-const res = await fetch(`${BASE_URL}/job/${encodeURIComponent(id)}`,{
-  method:'GET'
-})
+export async function getJobDetails(id: string): Promise<EmployerJob | null> {
+  const response = await fetch(`${BASE_URL}/job/${encodeURIComponent(id)}`, {
+    method: "GET",
+    cache: "no-store",
+  })
 
-return await res.json()
+  if (response.status === 404) return null
 
+  if (!response.ok) {
+    throw new Error(
+      `Could not load job details (${response.status} ${response.statusText}).`
+    )
+  }
+
+  // An empty body means the job was not found.
+  return (await response.json().catch(() => null)) as EmployerJob | null
 }

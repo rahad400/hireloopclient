@@ -25,7 +25,7 @@ export function BrowseJobsHeader({
         <div className="flex flex-row items-center gap-3 pt-0 pb-3 md:gap-4">
           <Link
             href={"/browse-jobs"}
-            className="shrink-0 text-sm font-semibold tracking-tight whitespace-nowrap text-[#554de5]  sm:text-lg md:text-xl"
+            className="shrink-0 text-sm font-semibold tracking-tight whitespace-nowrap text-[#554de5] sm:text-lg md:text-xl"
           >
             Browse Jobs
           </Link>
@@ -47,12 +47,12 @@ export function BrowseJobsHeader({
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 border-t border-white/[0.06] py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col items-end gap-2 self-end border-t border-white/[0.06] py-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-base font-semibold text-ink">
             Found {jobsCount} Professional Jobs
           </h2>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 ">
             <label htmlFor="browse-job-sort" className="text-xs text-ink-muted">
               Sort by:
             </label>

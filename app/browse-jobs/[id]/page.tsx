@@ -1,16 +1,32 @@
-import { getDetailsId } from '@/app/lip/actions/jobs';
-import type { EmployerJob } from "@/components/employer/manage-jobs/ts/employer-job"
+import { notFound } from "next/navigation"
 
-const BrowseJobsDeatailsPage = async ({params}:{params:Promise<{id:string}>}) => {
-    const {id} = await params
-    // console.log('details id',id)
-    const details = await getDetailsId(id)
-    // console.log(details)
-    return (
-        <div>
-            <h2>{details.title}</h2>
-        </div>
-    );
-};
+import { getJobDetails } from "@/app/lip/actions/jobs"
+import getJobs from "@/app/lip/api/jobs"
+import { BrowseJobDetails } from "@/components/browse-jobs/job-details/browse-job-details"
 
-export default BrowseJobsDeatailsPage;
+const objectIdPattern = /^[a-f\d]{24}$/i
+
+export default async function BrowseJobDetailsPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
+
+  if (!objectIdPattern.test(id)) notFound()
+
+  const job = await getJobDetails(id)
+  if (!job) notFound()
+
+  // Suggest jobs from the same category first, then fill with any others.
+  const allJobs = await getJobs()
+  const sameCategory = allJobs.filter(
+    (item) => item._id !== job._id && item.category === job.category
+  )
+  const otherJobs = allJobs.filter(
+    (item) => item._id !== job._id && item.category !== job.category
+  )
+  const similarJobs = [...sameCategory, ...otherJobs].slice(0, 3)
+
+  return <BrowseJobDetails job={job} similarJobs={similarJobs} />
+}
