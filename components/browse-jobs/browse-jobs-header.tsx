@@ -6,6 +6,7 @@ import { sortOptions } from "@/components/browse-jobs/ts/browse-jobs-constants"
 import type { BrowseJobsHeaderProps } from "@/components/browse-jobs/ts/browse-jobs-types"
 import { JobSelect } from "@/components/employer/add-job/job-select"
 import { Separator } from "@/components/ui/separator"
+import Link from "next/link"
 
 /** Sticky top section with the title, search bar, filters button and results count. */
 export function BrowseJobsHeader({
@@ -18,16 +19,19 @@ export function BrowseJobsHeader({
   onSortChange,
 }: BrowseJobsHeaderProps) {
   return (
-    <header className=" pt-3 sticky top-0 z-30 w-full border-b border-white/[0.06] bg-night">
+    <header className="sticky top-[78px] z-31 w-full border-b border-white/[0.06] bg-night sm:top-[84px]">
       <div className="mx-auto w-full max-w-[1320px] px-4 sm:px-6 lg:px-8">
         <div className="flex flex-row items-center gap-3 pt-0 pb-3 md:gap-4">
-          <h1 className="shrink-0 whitespace-nowrap text-sm font-semibold tracking-tight text-ink sm:text-lg md:text-xl">
+          <Link
+            href={"/browse-jobs"}
+            className="shrink-0 text-sm font-semibold tracking-tight whitespace-nowrap text-[#554de5]  sm:text-lg md:text-xl"
+          >
             Browse Jobs
-          </h1>
+          </Link>
 
           <Separator
             orientation="vertical"
-            className="hidden  bg-white/10 sm:block "
+            className="hidden bg-white/10 sm:block"
           />
 
           <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-center">

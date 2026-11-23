@@ -25,15 +25,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { string } from "better-auth"
 
 type FilterSelectProps = {
+  name:string
   label: string
   options: FilterOption[]
   onOptionChange: FilterChangeHandler
 }
 
 /** One rounded select for a single filter. */
-function FilterSelect({ label, options, onOptionChange }: FilterSelectProps) {
+function FilterSelect({name, label, options, onOptionChange }: FilterSelectProps) {
   return (
     <div className="flex flex-col gap-1.5 ">
       <span className="text-[11px] font-medium text-ink-muted">{label}</span>
@@ -41,13 +43,13 @@ function FilterSelect({ label, options, onOptionChange }: FilterSelectProps) {
       <Select
         defaultValue={allFilterValue}
         items={options}
-        onValueChange={onOptionChange}
+        onValueChange={ (value)=> {if(typeof value === "string")
+          onOptionChange(value,name)}}
         modal={false}
       >
         <SelectTrigger aria-label={label}>
           <SelectValue />
         </SelectTrigger>
-
         <SelectContent>
           {options.map((option) => (
             <SelectItem key={option.value} value={option.value}>
@@ -95,36 +97,43 @@ export function BrowseJobsFilters({
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
         <FilterSelect
+        name="category"
           label="Category"
           options={categoryFilterOptions}
           onOptionChange={onFilterChange}
         />
         <FilterSelect
+        name="type"
           label="Job Type"
           options={jobTypeFilterOptions}
           onOptionChange={onFilterChange}
         />
         <FilterSelect
+        name="location"
           label="Location"
           options={locationOptions}
           onOptionChange={onFilterChange}
         />
         <FilterSelect
+        name="isRemote"
           label="Work Mode"
           options={workModeFilterOptions}
           onOptionChange={onFilterChange}
         />
         <FilterSelect
+        name="company"
           label="Company"
           options={companyOptions}
           onOptionChange={onFilterChange}
         />
         <FilterSelect
+        name='frequency'
           label="Salary Frequency"
           options={salaryFrequencyFilterOptions}
           onOptionChange={onFilterChange}
         />
         <FilterSelect
+        name='status'
           label="Status"
           options={statusFilterOptions}
           onOptionChange={onFilterChange}

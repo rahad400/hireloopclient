@@ -22,7 +22,7 @@ export function BrowseJobsSearch({ onSearchSubmit }: BrowseJobsSearchProps) {
           </label>
           <Input
             id="browse-job-search"
-            name="query"
+            name="searchField"
             type="search"
             autoComplete="off"
             placeholder="Search by job title, keywords..."
