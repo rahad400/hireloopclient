@@ -50,9 +50,12 @@ export const statusFilterOptions: FilterOption[] = [
   { value: "Expired", label: "Expired" },
 ]
 
+/** Value shown by the sort dropdown when no `sort` param is in the URL. */
+export const defaultSortValue = "most-recent"
+
 /** Options from the Figma "Sort jobs" dropdown. */
 export const sortOptions: FilterOption[] = [
-  { value: "most-recent", label: "Most Recent" },
+  { value: defaultSortValue, label: "Most Recent" },
   { value: "highest-salary", label: "Highest Salary" },
   { value: "most-relevant", label: "Most Relevant" },
   { value: "oldest", label: "Oldest" },

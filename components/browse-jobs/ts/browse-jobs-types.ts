@@ -15,6 +15,8 @@ export type SortChangeHandler = (event: ChangeEvent<HTMLSelectElement>) => void
 
 export type BrowseJobsContentProps = {
   jobs: EmployerJob[]
+  /** Current sort option, read from the URL by the server page. */
+  sort: string
 }
 
 export type BrowseJobsSearchProps = {
@@ -37,6 +39,8 @@ export type BrowseJobsHeaderProps = BrowseJobsSearchProps &
     jobsCount: number
     /** Passed to the mobile drawer so its selects reset with the sidebar. */
     filterResetKey: number
+    /** Value currently selected in the sort dropdown. */
+    sortValue: string
     onSortChange: SortChangeHandler
   }
 

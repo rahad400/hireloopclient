@@ -1,5 +1,6 @@
 import getJobs from "@/app/lip/api/jobs"
 import { BrowseJobsContent } from "@/components/browse-jobs/browse-jobs-content"
+import { defaultSortValue } from "@/components/browse-jobs/ts/browse-jobs-constants"
 
 /** Public job board at `/browse-jobs`. */
 export default async function BrowseJobsPage({
@@ -20,5 +21,9 @@ export default async function BrowseJobsPage({
 
   const jobs = await getJobs(params.toString())
 
-  return <BrowseJobsContent jobs={jobs} />
+  // Keep the dropdown in sync with the URL (including back/forward).
+  const sort =
+    typeof search.sort === "string" ? search.sort : defaultSortValue
+
+  return <BrowseJobsContent jobs={jobs} sort={sort} />
 }

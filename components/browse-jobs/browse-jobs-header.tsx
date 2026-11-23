@@ -16,6 +16,7 @@ export function BrowseJobsHeader({
   onFilterChange,
   onClearFilters,
   filterResetKey,
+  sortValue,
   onSortChange,
 }: BrowseJobsHeaderProps) {
   return (
@@ -58,7 +59,7 @@ export function BrowseJobsHeader({
             <JobSelect
               id="browse-job-sort"
               name="sort"
-              defaultValue="most-recent"
+              value={sortValue}
               onChange={onSortChange}
               className="h-9 w-36 text-[13px]"
             >

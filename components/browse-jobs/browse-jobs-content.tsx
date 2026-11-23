@@ -3,7 +3,7 @@
 import { BrowseJobsFilters } from "@/components/browse-jobs/browse-jobs-filters"
 import { BrowseJobsHeader } from "@/components/browse-jobs/browse-jobs-header"
 import { BrowseJobsList } from "@/components/browse-jobs/browse-jobs-list"
-import { allFilterValue } from "@/components/browse-jobs/ts/browse-jobs-constants"
+import { allFilterValue, defaultSortValue } from "@/components/browse-jobs/ts/browse-jobs-constants"
 import type { BrowseJobsContentProps } from "@/components/browse-jobs/ts/browse-jobs-types"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -20,7 +20,7 @@ const filterParamNames = [
 ] as const
 
 /** Composes the sticky top section, filter sidebar and job list. */
-export function BrowseJobsContent({ jobs }: BrowseJobsContentProps) {
+export function BrowseJobsContent({ jobs, sort }: BrowseJobsContentProps) {
   // Bumping this value remounts the filter selects so they reset to "All".
   const [filterResetKey, setFilterResetKey] = useState(0)
   const router = useRouter()
@@ -63,8 +63,20 @@ export function BrowseJobsContent({ jobs }: BrowseJobsContentProps) {
     router.push(query ? `/browse-jobs?${query}` : "/browse-jobs")
   }
 
-  function handleSortChange() {
-    // TODO: Add your sort logic here.
+  function handleSortChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    // Keep every filter/search param and only change the sort.
+    const params = new URLSearchParams(window.location.search)
+    const value = event.currentTarget.value
+
+    if (value === defaultSortValue) {
+      // "Most Recent" is the default, so keep the URL clean.
+      params.delete("sort")
+    } else {
+      params.set("sort", value)
+    }
+
+    const query = params.toString()
+    router.push(query ? `/browse-jobs?${query}` : "/browse-jobs")
   }
 
   const filterProps = {
@@ -79,6 +91,7 @@ export function BrowseJobsContent({ jobs }: BrowseJobsContentProps) {
         {...filterProps}
         jobsCount={jobs.length}
         filterResetKey={filterResetKey}
+        sortValue={sort}
         onSearchSubmit={handleSearchSubmit}
         onSortChange={handleSortChange}
       />
