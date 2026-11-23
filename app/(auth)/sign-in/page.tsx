@@ -32,6 +32,15 @@ export default function SignInPage() {
     event.preventDefault()
     setErrorMessage(null)
     setIsSubmitting(true)
+    const requestedRedirect = new URLSearchParams(window.location.search).get(
+      "redirectTo"
+    )
+    const redirectTo =
+      requestedRedirect?.startsWith("/") &&
+      !requestedRedirect.startsWith("//") &&
+      !requestedRedirect.startsWith("/\\")
+        ? requestedRedirect
+        : "/"
 
     const { data, error } = await authClient.signIn.email({
       email,
@@ -47,7 +56,7 @@ export default function SignInPage() {
       return
     }
 
-    router.push('/')
+    router.push(redirectTo)
     router.refresh()
   }
 
@@ -63,6 +72,15 @@ export default function SignInPage() {
             className="font-medium text-brand-strong hover:underline"
           >
             Create an account
+          </Link>
+          <span aria-hidden="true" className="mx-2 text-white/20">
+            ·
+          </span>
+          <Link
+            href="/browse-jobs"
+            className="font-medium text-brand-strong hover:underline"
+          >
+            Browse jobs
           </Link>
         </>
       }

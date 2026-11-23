@@ -13,21 +13,26 @@ import {
   secondaryButtonClassName,
 } from "@/components/employer/manage-jobs/ts/manage-jobs-styles"
 import { cn } from "cn"
-
+import { useSession } from "@/app/lip/auth-client"
+import { useRouter } from "next/navigation"
 /** The two actions every seeker needs: Apply Now and Save. */
 export function BrowseJobDetailsActions({ job }: { job: EmployerJob }) {
   const [isSaved, setIsSaved] = useState(false)
   const [hasApplied, setHasApplied] = useState(false)
-
+  const router = useRouter()
+  const { data: session } = useSession()
+  const user = session?.user
   function handleSave() {
-    setIsSaved((saved) => !saved)
-
-    toast.success(isSaved ? "Removed from saved jobs" : "Job saved", {
-      description: job.title,
-    })
+    if (!user) {
+      router.push(`/sign-in?redirectTo=/browse-jobs/${job._id}`)
+    }
+    // TODO: Add your save logic here.
   }
 
   function handleApply() {
+    if (!user) {
+      router.push(`/sign-in?redirectTo=/browse-jobs/${job._id}`)
+    }
     if (getJobStatus(job) === "Expired") {
       toast.error("Applications are closed for this job")
       return

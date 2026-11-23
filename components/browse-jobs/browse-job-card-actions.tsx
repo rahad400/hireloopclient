@@ -6,6 +6,8 @@ import type { EmployerJob } from "@/components/employer/manage-jobs/ts/employer-
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 
+
+
 type BrowseJobCardActionsProps = {
   job: EmployerJob
 }
@@ -13,12 +15,12 @@ type BrowseJobCardActionsProps = {
 /** Browse job card actions. Add your own click behaviour inside these handlers. */
 export function BrowseJobCardActions({ job }: BrowseJobCardActionsProps) {
   const router = useRouter()
-  function handleSave() {
-    // TODO: Add your save logic here.
-  }
+
+
+ 
 
   function handleApply() {
-    // TODO: Add your apply logic here.
+    
   }
 
   function handleViewDetails() {
@@ -27,7 +29,7 @@ export function BrowseJobCardActions({ job }: BrowseJobCardActionsProps) {
 
   return (
     <div className="flex flex-wrap gap-2">
-      <Button
+      {/* <Button
         type="button"
         aria-label={`Save ${job.title}`}
         onClick={handleSave}
@@ -36,9 +38,9 @@ export function BrowseJobCardActions({ job }: BrowseJobCardActionsProps) {
       >
         <Bookmark className="size-3.5" aria-hidden="true" />
         Save
-      </Button>
+      </Button> */}
 
-      <Button
+      {/* <Button
         type="button"
         aria-label={`Apply to ${job.title}`}
         onClick={handleApply}
@@ -46,7 +48,7 @@ export function BrowseJobCardActions({ job }: BrowseJobCardActionsProps) {
       >
         <Send className="size-3.5" aria-hidden="true" />
         Apply
-      </Button>
+      </Button> */}
 
       <Button
         type="button"

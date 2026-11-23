@@ -46,14 +46,15 @@ export function AuthCard({
     >
       <CardHeader className="items-center gap-2 px-6 pt-8 pb-0 text-center sm:px-8">
         <HireloopLogo className="mb-3" />
+        
+          <h1 className="font-heading text-2xl font-semibold tracking-tight text-ink sm:text-[1.75rem]">
+            {title}
+          </h1>
 
-        <h1 className="font-heading text-2xl font-semibold tracking-tight text-ink sm:text-[1.75rem]">
-          {title}
-        </h1>
-
-        <CardDescription className="max-w-xs text-sm leading-relaxed text-ink-muted">
-          {description}
-        </CardDescription>
+          <CardDescription className="mx-auto flex items-center justify-center max-w-xs text-sm leading-relaxed text-ink-muted">
+            {description}
+          </CardDescription>
+        
       </CardHeader>
 
       <CardContent className="px-6 pt-6 pb-7 sm:px-8">{children}</CardContent>

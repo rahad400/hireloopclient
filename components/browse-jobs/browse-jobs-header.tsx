@@ -20,7 +20,7 @@ export function BrowseJobsHeader({
   onSortChange,
 }: BrowseJobsHeaderProps) {
   return (
-    <header className="sticky top-[78px] z-31 w-full border-b border-white/[0.06] bg-night sm:top-[84px]">
+    <header className="pt-4 sticky top-[78px] z-31 w-full border-b border-white/[0.06] bg-night sm:top-[84px]">
       <div className="mx-auto w-full max-w-[1320px] px-4 sm:px-6 lg:px-8">
         <div className="flex flex-row items-center gap-3 pt-0 pb-3 md:gap-4">
           <Link
@@ -30,11 +30,7 @@ export function BrowseJobsHeader({
             Browse Jobs
           </Link>
 
-          <Separator
-            orientation="vertical"
-            className="hidden bg-white/10 sm:block"
-          />
-
+          <span aria-hidden className="hidden h-6 w-px bg-white/10 lg:block" />
           <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-center">
             <BrowseJobsSearch onSearchSubmit={onSearchSubmit} />
 
@@ -52,7 +48,7 @@ export function BrowseJobsHeader({
             Found {jobsCount} Professional Jobs
           </h2>
 
-          <div className="flex items-center gap-2 ">
+          <div className="flex items-center gap-2">
             <label htmlFor="browse-job-sort" className="text-xs text-ink-muted">
               Sort by:
             </label>

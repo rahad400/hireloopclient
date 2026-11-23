@@ -75,6 +75,15 @@ export default function SignUpPage() {
           >
             Sign in
           </Link>
+          <span aria-hidden="true" className="mx-2 text-white/20">
+            ·
+          </span>
+          <Link
+            href="/browse-jobs"
+            className="font-medium text-brand-strong hover:underline"
+          >
+            Browse jobs
+          </Link>
         </>
       }
     >
