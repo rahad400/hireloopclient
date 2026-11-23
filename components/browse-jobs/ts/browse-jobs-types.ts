@@ -25,12 +25,18 @@ export type BrowseJobsFiltersProps = {
   jobs: EmployerJob[]
   onFilterChange: FilterChangeHandler
   onClearFilters: FilterActionHandler
-  onSaveFilters: FilterActionHandler
+}
+
+export type BrowseJobsFilterDrawerProps = BrowseJobsFiltersProps & {
+  /** Changes whenever the filters are cleared so the selects reset. */
+  resetKey: number
 }
 
 export type BrowseJobsHeaderProps = BrowseJobsSearchProps &
   BrowseJobsFiltersProps & {
     jobsCount: number
+    /** Passed to the mobile drawer so its selects reset with the sidebar. */
+    filterResetKey: number
     onSortChange: SortChangeHandler
   }
 

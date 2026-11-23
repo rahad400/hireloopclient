@@ -3,7 +3,7 @@
 import { SlidersHorizontal } from "lucide-react"
 
 import { BrowseJobsFilters } from "@/components/browse-jobs/browse-jobs-filters"
-import type { BrowseJobsFiltersProps } from "@/components/browse-jobs/ts/browse-jobs-types"
+import type { BrowseJobsFilterDrawerProps } from "@/components/browse-jobs/ts/browse-jobs-types"
 import {
   Sheet,
   SheetContent,
@@ -13,7 +13,10 @@ import {
 } from "@/components/ui/sheet"
 
 /** Tablet and mobile filter drawer. The desktop sidebar stays unchanged. */
-export function BrowseJobsFilterDrawer(props: BrowseJobsFiltersProps) {
+export function BrowseJobsFilterDrawer({
+  resetKey,
+  ...props
+}: BrowseJobsFilterDrawerProps) {
   return (
     <Sheet >
       <SheetTrigger className="  flex h-10 w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 text-sm font-medium text-ink transition-colors hover:bg-white/[0.07] sm:w-auto lg:hidden">
@@ -30,7 +33,7 @@ export function BrowseJobsFilterDrawer(props: BrowseJobsFiltersProps) {
         </SheetHeader>
 
         <div className="px-4 pb-4">
-          <BrowseJobsFilters {...props} />
+          <BrowseJobsFilters key={resetKey} {...props} />
         </div>
       </SheetContent>
     </Sheet>

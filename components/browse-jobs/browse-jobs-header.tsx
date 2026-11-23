@@ -15,7 +15,7 @@ export function BrowseJobsHeader({
   onSearchSubmit,
   onFilterChange,
   onClearFilters,
-  onSaveFilters,
+  filterResetKey,
   onSortChange,
 }: BrowseJobsHeaderProps) {
   return (
@@ -41,7 +41,7 @@ export function BrowseJobsHeader({
               jobs={jobs}
               onFilterChange={onFilterChange}
               onClearFilters={onClearFilters}
-              onSaveFilters={onSaveFilters}
+              resetKey={filterResetKey}
             />
           </div>
         </div>

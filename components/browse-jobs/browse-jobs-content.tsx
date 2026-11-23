@@ -3,11 +3,26 @@
 import { BrowseJobsFilters } from "@/components/browse-jobs/browse-jobs-filters"
 import { BrowseJobsHeader } from "@/components/browse-jobs/browse-jobs-header"
 import { BrowseJobsList } from "@/components/browse-jobs/browse-jobs-list"
+import { allFilterValue } from "@/components/browse-jobs/ts/browse-jobs-constants"
 import type { BrowseJobsContentProps } from "@/components/browse-jobs/ts/browse-jobs-types"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
+
+/** Query keys the "Clear Filters" button removes. */
+const filterParamNames = [
+  "category",
+  "type",
+  "location",
+  "isRemote",
+  "company",
+  "frequency",
+  "status",
+] as const
 
 /** Composes the sticky top section, filter sidebar and job list. */
 export function BrowseJobsContent({ jobs }: BrowseJobsContentProps) {
+  // Bumping this value remounts the filter selects so they reset to "All".
+  const [filterResetKey, setFilterResetKey] = useState(0)
   const router = useRouter()
   function handleSearchSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -21,20 +36,31 @@ export function BrowseJobsContent({ jobs }: BrowseJobsContentProps) {
   }
 
   function handleFilterChange(name: string, value: string) {
+    // Start from the current URL so other filters (and search) are kept.
     const params = new URLSearchParams(window.location.search)
-    params.set(name, value)
-    router.push(`/browse-jobs?${params.toString()}`)
 
-    console.log("name and value:", name, value)
-    console.log(params)
+    if (value === allFilterValue) {
+      // "All ..." means no filter, so remove the key entirely.
+      params.delete(name)
+    } else {
+      params.set(name, value)
+    }
+
+    const query = params.toString()
+    router.push(query ? `/browse-jobs?${query}` : "/browse-jobs")
   }
 
   function handleClearFilters() {
-    // TODO: Add your clear filters logic here.
-  }
+    // Keep non-filter params such as `search`, remove only the filters.
+    const params = new URLSearchParams(window.location.search)
+    for (const name of filterParamNames) {
+      params.delete(name)
+    }
 
-  function handleSaveFilters() {
-    // TODO: Add your save filters logic here.
+    setFilterResetKey((key) => key + 1)
+
+    const query = params.toString()
+    router.push(query ? `/browse-jobs?${query}` : "/browse-jobs")
   }
 
   function handleSortChange() {
@@ -45,7 +71,6 @@ export function BrowseJobsContent({ jobs }: BrowseJobsContentProps) {
     jobs,
     onFilterChange: handleFilterChange,
     onClearFilters: handleClearFilters,
-    onSaveFilters: handleSaveFilters,
   }
 
   return (
@@ -53,6 +78,7 @@ export function BrowseJobsContent({ jobs }: BrowseJobsContentProps) {
       <BrowseJobsHeader
         {...filterProps}
         jobsCount={jobs.length}
+        filterResetKey={filterResetKey}
         onSearchSubmit={handleSearchSubmit}
         onSortChange={handleSortChange}
       />
@@ -60,9 +86,8 @@ export function BrowseJobsContent({ jobs }: BrowseJobsContentProps) {
       <div className="mx-auto w-full max-w-[1320px] px-4 py-6 pb-10 sm:px-6 lg:px-8">
         <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
           <aside className="hidden h-fit rounded-xl border border-white/[0.07] bg-night-soft p-4 lg:sticky lg:top-60 lg:block lg:max-h-[calc(100vh-16rem)] lg:self-start lg:overflow-y-auto">
-            <BrowseJobsFilters {...filterProps} />
+            <BrowseJobsFilters key={filterResetKey} {...filterProps} />
           </aside>
-
           <section aria-label="Job listings" className="min-w-0">
             <BrowseJobsList jobs={jobs} />
           </section>

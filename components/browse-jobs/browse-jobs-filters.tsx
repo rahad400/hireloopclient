@@ -44,7 +44,7 @@ function FilterSelect({name, label, options, onOptionChange }: FilterSelectProps
         defaultValue={allFilterValue}
         items={options}
         onValueChange={ (value)=> {if(typeof value === "string")
-          onOptionChange(value,name)}}
+          onOptionChange(name,value)}}
         modal={false}
       >
         <SelectTrigger aria-label={label}>
@@ -67,7 +67,7 @@ export function BrowseJobsFilters({
   jobs,
   onFilterChange,
   onClearFilters,
-  onSaveFilters,
+ 
 }: BrowseJobsFiltersProps) {
   const locationOptions = createFilterOptions(
     jobs.map((job) => job.location),
@@ -142,13 +142,6 @@ export function BrowseJobsFilters({
 
       <Separator className="mt-4 bg-white/[0.06]" />
 
-      <Button
-        type="button"
-        onClick={onSaveFilters}
-        className="mt-3 h-9 w-full rounded-lg bg-brand text-xs font-semibold text-white hover:bg-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60"
-      >
-        Save Filters
-      </Button>
     </div>
   )
 }
