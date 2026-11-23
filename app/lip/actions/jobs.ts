@@ -40,3 +40,13 @@ export async function duplicateJob(job: EmployerJob): Promise<void> {
   const { _id, createdAt, applicants, ...jobData } = job
   await createJobs(jobData)
 }
+
+
+export const getDetailsId = async(id:string)=>{
+const res = await fetch(`${BASE_URL}/job/${encodeURIComponent(id)}`,{
+  method:'GET'
+})
+
+return await res.json()
+
+}

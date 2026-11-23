@@ -4,6 +4,7 @@ import { ArrowUpRight, Bookmark, Send } from "lucide-react"
 
 import type { EmployerJob } from "@/components/employer/manage-jobs/ts/employer-job"
 import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 
 type BrowseJobCardActionsProps = {
   job: EmployerJob
@@ -11,6 +12,7 @@ type BrowseJobCardActionsProps = {
 
 /** Browse job card actions. Add your own click behaviour inside these handlers. */
 export function BrowseJobCardActions({ job }: BrowseJobCardActionsProps) {
+  const router = useRouter()
   function handleSave() {
     // TODO: Add your save logic here.
   }
@@ -20,7 +22,7 @@ export function BrowseJobCardActions({ job }: BrowseJobCardActionsProps) {
   }
 
   function handleViewDetails() {
-    // TODO: Add your view details logic here.
+    router.push(`/browse-jobs/${job._id}`)
   }
 
   return (
