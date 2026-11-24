@@ -1,9 +1,16 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Bookmark, BookmarkCheck, Check, Send } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
+import {
+  ALREADY_APPLIED_MESSAGE,
+  applyToJob,
+  hasUserAppliedToJob,
+} from "@/app/lip/actions/aplication"
+import { useSession } from "@/app/lip/auth-client"
 import {
   getJobStatus,
   type EmployerJob,
@@ -13,55 +20,117 @@ import {
   secondaryButtonClassName,
 } from "@/components/employer/manage-jobs/ts/manage-jobs-styles"
 import { cn } from "cn"
-import { useSession } from "@/app/lip/auth-client"
-import { useRouter } from "next/navigation"
-import { applyToJob } from "@/app/lip/actions/aplication"
+
 /** The two actions every seeker needs: Apply Now and Save. */
 export function BrowseJobDetailsActions({ job }: { job: EmployerJob }) {
   const [isSaved, setIsSaved] = useState(false)
   const [hasApplied, setHasApplied] = useState(false)
+  const [isCheckingApplication, setIsCheckingApplication] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const hasShownAppliedToast = useRef(false)
+
   const router = useRouter()
-  const { data: session } = useSession()
+  const { data: session, isPending } = useSession()
   const user = session?.user
+  const userId = user?.id
+  const userRole = user?.role
+
+  // Restore the Applied state after a refresh or a return visit.
+  useEffect(() => {
+    if (!userId || userRole !== "candidate") return
+
+    const currentUserId = userId
+    let ignore = false
+
+    async function checkApplication() {
+      setIsCheckingApplication(true)
+      try {
+        const applied = await hasUserAppliedToJob(currentUserId, job._id)
+        if (ignore) return
+
+        setHasApplied(applied)
+        if (applied && !hasShownAppliedToast.current) {
+          hasShownAppliedToast.current = true
+          toast.error(ALREADY_APPLIED_MESSAGE)
+        }
+      } catch {
+        // The API still blocks duplicates; a failed lookup must not stop applying.
+      } finally {
+        if (!ignore) setIsCheckingApplication(false)
+      }
+    }
+
+    checkApplication()
+    return () => {
+      ignore = true
+    }
+  }, [job._id, userId, userRole])
+
+  const isBusy = isPending || isCheckingApplication || isSubmitting
+
   function handleSave() {
     if (!user) {
       router.push(`/sign-in?redirectTo=/browse-jobs/${job._id}`)
+      return
     }
+    setIsSaved((current) => !current)
   }
 
   async function handleApply() {
-    const route = `/sign-in?redirectTo=/browse-jobs/${job._id}`
+    if (isPending) return
+
     if (!user) {
-      router.push(route)
+      router.push(`/sign-in?redirectTo=/browse-jobs/${job._id}`)
       return
     }
+
+    if (hasApplied) {
+      toast.error(ALREADY_APPLIED_MESSAGE)
+      return
+    }
+
+    if (isBusy) return
 
     if (getJobStatus(job) === "Expired") {
       toast.error("Applications are closed for this job")
       return
     }
 
-    if (user.role !== "candidate") return
-
-    const application = {
-      jobId: job._id,
-      userId: user.id,
-      email: user.email,
-      name: user.name,
-      jobTitle: job.title,
-      company: job.company,
+    if (userRole !== "candidate") {
+      toast.error("Only candidates can apply for jobs.")
+      return
     }
 
-    try {
-      const result = await applyToJob(application)
+    setIsSubmitting(true)
 
-      if (result) {
-        setHasApplied(true)
-        toast.success("Application sent")
-        router.push("/browse-jobs")
-      }
+    try {
+      await applyToJob({
+        jobId: job._id,
+        userId: user.id,
+        email: user.email,
+        name: user.name,
+        jobTitle: job.title,
+        company: job.company,
+      })
+
+      setHasApplied(true)
+      toast.success("Application sent")
+      router.push("/browse-jobs")
     } catch (error) {
-      toast.error("Failed to submit application")
+      const message =
+        error instanceof Error ? error.message : "Failed to submit application"
+
+      if (message === ALREADY_APPLIED_MESSAGE) {
+        setHasApplied(true)
+      }
+
+      toast.error(
+        message === ALREADY_APPLIED_MESSAGE
+          ? message
+          : "Failed to submit application"
+      )
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -70,11 +139,12 @@ export function BrowseJobDetailsActions({ job }: { job: EmployerJob }) {
       <button
         type="button"
         onClick={handleApply}
-        disabled={hasApplied}
+        disabled={isBusy || hasApplied}
+        aria-busy={isBusy}
         className={cn(
           primaryButtonClassName,
           "inline-flex w-full items-center justify-center sm:w-auto",
-          hasApplied && "cursor-default opacity-70"
+          (isBusy || hasApplied) && "cursor-default opacity-70"
         )}
       >
         {hasApplied ? (
@@ -82,7 +152,7 @@ export function BrowseJobDetailsActions({ job }: { job: EmployerJob }) {
         ) : (
           <Send aria-hidden="true" className="size-4" />
         )}
-        {hasApplied ? "Applied" : "Apply Now"}
+        {hasApplied ? "Applied" : isBusy ? "Please wait..." : "Apply Now"}
       </button>
 
       <button
