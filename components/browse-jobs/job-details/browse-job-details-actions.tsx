@@ -15,6 +15,7 @@ import {
 import { cn } from "cn"
 import { useSession } from "@/app/lip/auth-client"
 import { useRouter } from "next/navigation"
+import { applyToJob } from "@/app/lip/actions/aplication"
 /** The two actions every seeker needs: Apply Now and Save. */
 export function BrowseJobDetailsActions({ job }: { job: EmployerJob }) {
   const [isSaved, setIsSaved] = useState(false)
@@ -26,22 +27,42 @@ export function BrowseJobDetailsActions({ job }: { job: EmployerJob }) {
     if (!user) {
       router.push(`/sign-in?redirectTo=/browse-jobs/${job._id}`)
     }
-    // TODO: Add your save logic here.
   }
 
-  function handleApply() {
+  async function handleApply() {
+    const route = `/sign-in?redirectTo=/browse-jobs/${job._id}`
     if (!user) {
-      router.push(`/sign-in?redirectTo=/browse-jobs/${job._id}`)
+      router.push(route)
+      return
     }
+
     if (getJobStatus(job) === "Expired") {
       toast.error("Applications are closed for this job")
       return
     }
 
-    setHasApplied(true)
-    toast.success("Application sent", {
-      description: `Your application for ${job.title} was recorded.`,
-    })
+    if (user.role !== "candidate") return
+
+    const application = {
+      jobId: job._id,
+      userId: user.id,
+      email: user.email,
+      name: user.name,
+      jobTitle: job.title,
+      company: job.company,
+    }
+
+    try {
+      const result = await applyToJob(application)
+
+      if (result) {
+        setHasApplied(true)
+        toast.success("Application sent")
+        router.push("/browse-jobs")
+      }
+    } catch (error) {
+      toast.error("Failed to submit application")
+    }
   }
 
   return (

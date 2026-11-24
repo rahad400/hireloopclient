@@ -17,7 +17,7 @@ export async function createJobs(data: JobFormValues): Promise<void> {
     )
   }
 
-  // console.log(response,data)
+  return await response.json()
 };
 
 
