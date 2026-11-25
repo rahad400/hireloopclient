@@ -1,8 +1,18 @@
 import Link from "next/link"
-import { ArrowLeft, Check, CreditCard, LockKeyhole } from "lucide-react"
+import { ArrowLeft, Check, CreditCard } from "lucide-react"
 
-/** Simple payment screen. Stripe checkout will replace the button later. */
-const PaymentPage = () => {
+const PaymentPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ canceled?: string }>
+}) => {
+  const { canceled } = await searchParams
+
+  if (canceled) {
+    console.log(
+      "Order canceled -- continue to shop around and check out when you're ready."
+    )
+  }
   return (
     <main className="flex min-h-screen items-center justify-center bg-night px-4 py-12 text-ink">
       <div className="w-full max-w-lg">
@@ -25,8 +35,8 @@ const PaymentPage = () => {
                 Complete your payment
               </h1>
               <p className="mt-1 text-[13px] leading-5 text-ink-muted">
-                You have reached the 10 free applications limit. Upgrade to
-                keep applying.
+                You have reached the 10 free applications limit. Upgrade to keep
+                applying.
               </p>
             </div>
           </div>
@@ -38,7 +48,9 @@ const PaymentPage = () => {
 
             <div className="mt-4 flex items-start justify-between gap-4">
               <div className="min-w-0">
-                <p className="text-[15px] font-semibold text-white">Growth Plan</p>
+                <p className="text-[15px] font-semibold text-white">
+                  Growth Plan
+                </p>
                 <p className="mt-1 text-[12px] text-ink-muted">
                   Unlimited job applications
                 </p>
@@ -59,24 +71,28 @@ const PaymentPage = () => {
 
           <ul className="mt-5 space-y-2 text-[13px] text-ink-muted">
             <li className="flex items-center gap-2">
-              <Check aria-hidden="true" className="size-4 shrink-0 text-brand-strong" />
+              <Check
+                aria-hidden="true"
+                className="size-4 shrink-0 text-brand-strong"
+              />
               Secure checkout powered by Stripe
             </li>
             <li className="flex items-center gap-2">
-              <Check aria-hidden="true" className="size-4 shrink-0 text-brand-strong" />
+              <Check
+                aria-hidden="true"
+                className="size-4 shrink-0 text-brand-strong"
+              />
               Cancel anytime from your account settings
             </li>
           </ul>
-
-          <button
-            type="button"
-            disabled
-            className="mt-7 flex h-12 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-brand text-[14px] font-semibold text-white opacity-70"
-          >
-            <LockKeyhole aria-hidden="true" className="size-4" />
-            Continue to Stripe
-          </button>
-
+            <form action="/api/checkout_sessions" method="POST">
+      <section>
+        <button type="submit" role="link"
+              className="mt-7 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand text-[14px] font-semibold text-white transition-colors hover:bg-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:outline-none">
+          Payment
+        </button>
+      </section>
+    </form>
           <p className="mt-3 text-center text-[12px] text-ink-muted">
             Stripe checkout will be connected here. No payment is taken yet.
           </p>
