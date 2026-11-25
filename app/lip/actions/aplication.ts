@@ -49,27 +49,44 @@ export const applyToJob = async (data: JobApplication): Promise<boolean> => {
  * session cookie is sent automatically because credentials are included.
  */
 export const getApplyToJob = async (
-  cookie?: string
+  cookie?: string,
+  query = ""
 ): Promise<CandidateApplication[]> => {
-  const res = await fetch(`${BASE_URL}/application`, {
+  const res = await fetch(`${BASE_URL}/application?${query}`, {
     method: "GET",
     cache: "no-store",
     credentials: "include",
-    headers: cookie ? { cookie } : undefined,
+    headers: cookie ? { cookie: cookie } : undefined,
   })
 
   if (!res.ok) {
-    throw new Error(
-      await getErrorMessage(
-        res,
-        `Could not load applications (${res.status} ${res.statusText}).`
-      )
-    )
+    throw new Error("Could not load applications")
   }
 
-  return (await res.json()) as CandidateApplication[]
+  const data = await res.json()
+
+  return data
 }
 
+export const getApplyToJobCount = async (
+  cookie?: string,
+  query = ""
+): Promise<{count:number}> => {
+  const res = await fetch(`${BASE_URL}/application/count?${query}`, {
+    method: "GET",
+    cache: "no-store",
+    credentials: "include",
+    
+  })
+
+  if (!res.ok) {
+    throw new Error("Could not load applications")
+  }
+
+  const data = await res.json()
+
+  return data
+}
 /**
  * Early frontend check so the button can show "Applied" right away.
  * The backend still performs the real duplicate validation.

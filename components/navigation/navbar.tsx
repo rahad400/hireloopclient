@@ -74,7 +74,7 @@ export function Navbar() {
       <div className="pt-3 sm:pt-4">
         <div
           className={cn(
-            "border-l-r-none border transition-[background-color,border-color,box-shadow] duration-300 sm:h-[68px] sm:px-5",
+            "border-l-r-none border-b transition-[background-color,border-color,box-shadow] duration-300 sm:h-[68px] sm:px-5 lg:border",
             scrolled
               ? "border-white/15 bg-night-raised shadow-[0_18px_50px_-24px_rgba(0,0,0,0.9)]"
               : "border-white/[0.08] bg-night-raised shadow-[0_12px_40px_-28px_rgba(0,0,0,0.85)]"

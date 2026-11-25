@@ -8,6 +8,7 @@ import { toast } from "sonner"
 import {
   ALREADY_APPLIED_MESSAGE,
   applyToJob,
+  getApplyToJobCount,
   hasUserAppliedToJob,
 } from "@/app/lip/actions/aplication"
 import { useSession } from "@/app/lip/auth-client"
@@ -125,8 +126,17 @@ export function BrowseJobDetailsActions({ job }: { job: EmployerJob }) {
     }
 
     setIsSubmitting(true)
-
     try {
+      const applicationCount = await getApplyToJobCount(
+        undefined,
+        `applicantId=${user.id}`
+      )
+
+      if (applicationCount.count >= 10) {
+        router.push("/payments")
+        return
+      }
+
       await applyToJob({
         jobId: job._id,
         userId: user.id,

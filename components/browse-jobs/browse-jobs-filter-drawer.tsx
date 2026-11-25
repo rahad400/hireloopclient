@@ -12,14 +12,14 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 
-/** Tablet and mobile filter drawer. The desktop sidebar stays unchanged. */
+/** Compact mobile filter button and the shared filter drawer. */
 export function BrowseJobsFilterDrawer({
   resetKey,
   ...props
 }: BrowseJobsFilterDrawerProps) {
   return (
-    <Sheet >
-      <SheetTrigger className="  flex h-10 w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 text-sm font-medium text-ink transition-colors hover:bg-white/[0.07] sm:w-auto lg:hidden">
+    <Sheet>
+      <SheetTrigger className="inline-flex h-10 w-auto shrink-0 items-center justify-center gap-2 rounded-lg border border-white/10 bg-[#17171D] px-3 text-[13px] font-medium text-white transition-colors hover:bg-white/[0.07] lg:hidden lg:bg-white/[0.03] lg:text-sm lg:text-ink">
         <SlidersHorizontal className="size-4" aria-hidden="true" />
         Filters
       </SheetTrigger>
