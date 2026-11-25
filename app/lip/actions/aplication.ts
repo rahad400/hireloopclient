@@ -4,7 +4,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000"
 
 export const ALREADY_APPLIED_MESSAGE = "You have already applied for this job."
 
-type JobApplication = {
+export type JobApplication = {
   jobId: string
   userId: string
   email: string

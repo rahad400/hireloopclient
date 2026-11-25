@@ -56,7 +56,7 @@ export const dashboardRoles: Record<DashboardRole, DashboardRoleConfig> = {
     items: [
       { label: "Dashboard", href: "/candidate", icon: LayoutDashboard },
       { label: "Jobs", href: "/candidate/jobs", icon: Briefcase },
-      { label: "Saved Jobs", href: "/candidate/saved-jobs", icon: Bookmark },
+      { label: "Saved Jobs", href: "/candidate/save-jobs", icon: Bookmark },
       {
         label: "Applications",
         href: "/candidate/applications",

@@ -20,6 +20,7 @@ import {
   secondaryButtonClassName,
 } from "@/components/employer/manage-jobs/ts/manage-jobs-styles"
 import { cn } from "cn"
+import { saveJobs } from "@/app/lip/actions/save"
 
 /** The two actions every seeker needs: Apply Now and Save. */
 export function BrowseJobDetailsActions({ job }: { job: EmployerJob }) {
@@ -27,6 +28,7 @@ export function BrowseJobDetailsActions({ job }: { job: EmployerJob }) {
   const [hasApplied, setHasApplied] = useState(false)
   const [isCheckingApplication, setIsCheckingApplication] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
   const hasShownAppliedToast = useRef(false)
 
   const router = useRouter()
@@ -68,14 +70,35 @@ export function BrowseJobDetailsActions({ job }: { job: EmployerJob }) {
 
   const isBusy = isPending || isCheckingApplication || isSubmitting
 
-  function handleSave() {
+  // save jobs
+  async function handleSave() {
     if (!user) {
       router.push(`/sign-in?redirectTo=/browse-jobs/${job._id}`)
       return
     }
-    setIsSaved((current) => !current)
+
+    if (isSaved || isSaving) return
+
+    setIsSaving(true)
+    try {
+      await saveJobs({
+        jobId: job._id,
+        userId: user.id,
+        email: user.email,
+        name: user.name,
+        jobTitle: job.title,
+        company: job.company,
+      })
+      setIsSaved(true)
+      toast.success("Job saved")
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not save job")
+    } finally {
+      setIsSaving(false)
+    }
   }
 
+  // apply
   async function handleApply() {
     if (isPending) return
 
@@ -158,6 +181,7 @@ export function BrowseJobDetailsActions({ job }: { job: EmployerJob }) {
       <button
         type="button"
         onClick={handleSave}
+        disabled={isSaving}
         aria-pressed={isSaved}
         className={cn(
           secondaryButtonClassName,
