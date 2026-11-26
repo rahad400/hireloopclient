@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server"
 import { headers } from "next/headers"
 import { stripe } from "../../../lib/stripe"
-
+import { getSession } from "@/lib/core/server"
 
 export async function POST() {
+  const userSession = await getSession()
   try {
     const headersList = await headers()
     const origin = headersList.get("origin")
@@ -18,16 +19,18 @@ export async function POST() {
         },
       ],
       mode: "payment",
+      customer_email: userSession?.user.email,
+      metadata: {
+        user_name: userSession?.user.name ?? "",
+        userId: userSession?.user.id ?? "",
+      },
       success_url: `${origin}/payments/success?session_id={CHECKOUT_SESSION_ID}`,
       // Provide a name (for example, hosted_web_0001) to label this Checkout integration and measure its conversion independently
       integration_identifier: "hore_loop_001",
     })
     return NextResponse.redirect(session.url as string, 303)
   } catch (err) {
-    const error = err instanceof Error? err:new Error(String(err))
-    return NextResponse.json(
-      { error: error.message },
-      { status: 500 }
-    )
+    const error = err instanceof Error ? err : new Error(String(err))
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
