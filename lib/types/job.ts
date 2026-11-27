@@ -5,6 +5,7 @@ export type JobType = "Full-time" | "Part-time" | "Contract" | "Internship"
 /** The 12 fields a job form can write. Keep this shape in sync with the API. */
 export type JobFormValues = {
   title: string
+  employerId:string;
   company: string
   category: string
   type: JobType

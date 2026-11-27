@@ -1,3 +1,4 @@
+import { useSession } from "@/app/lip/auth-client"
 import type {
   EmployerJob,
   JobFormValues,
@@ -5,6 +6,7 @@ import type {
   JobStatusFilter,
   JobType,
 } from "@/lib/types/job"
+import { use } from "react"
 
 /**
  * The domain types now live in `lib/types/job.ts`.
@@ -52,8 +54,10 @@ export const salaryFrequencyOptions = [
 ]
 
 /** Empty form used by the Add Job page. */
+const { data: session } = useSession()
 export const emptyJobForm: JobFormValues = {
   title: "",
+  employerId: session?.user.id ?? "",
   company: "",
   category: "",
   type: "Full-time",

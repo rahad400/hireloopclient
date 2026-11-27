@@ -32,6 +32,7 @@ import {
   type JobStatusFilter,
 } from "@/components/employer/manage-jobs/ts/employer-job"
 import { cn } from "cn"
+import { getSession } from "@/app/lip/core/server"
 
 function errorMessage(cause: unknown) {
   return cause instanceof Error ? cause.message : "Could not load job posts."
@@ -84,7 +85,8 @@ export function ManageJobsContent() {
   }, [])
 
   const syncJobs = useCallback(async () => {
-    const result = await getJobs()
+    const session = await getSession()
+    const result = await getJobs(`employerId=${session?.user.id}`)
     setJobs(result)
     setError(null)
     return result
