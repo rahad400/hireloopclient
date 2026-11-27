@@ -2,6 +2,9 @@ import Link from "next/link"
 import { ArrowRight, Check, CreditCard } from "lucide-react"
 import { stripe } from "@/lib/stripe"
 import { redirect } from "next/navigation"
+import { paymentVerify } from "@/app/lip/actions/payment"
+
+
 
 /** Shown after Stripe sends the user back from checkout. */
 const SuccessPage = async ({
@@ -26,6 +29,7 @@ const SuccessPage = async ({
     return redirect("/")
   }
   if (status === "complete" && payment_status === "paid") {
+
     console.log({
       status,
       metadata,
@@ -33,7 +37,8 @@ const SuccessPage = async ({
       payment_intent,
       payment_status,
     })
-
+const result = await paymentVerify(session_id)
+// console.log(result)
     return (
       <main className="flex min-h-screen items-center justify-center bg-night px-4 py-12 text-ink">
         <div className="w-full max-w-lg">

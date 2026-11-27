@@ -46,7 +46,7 @@ export const dashboardRoles: Record<DashboardRole, DashboardRoleConfig> = {
   candidate: {
     subtitle: "Seeker Portal",
     ctaLabel: "Post Resume",
-    ctaHref: "/jobs",
+    ctaHref: "/browse-jobs",
     profile: {
       name: "candidate",
       roleLabel: "Job Seeker",

@@ -22,6 +22,7 @@ import {
 } from "@/components/employer/manage-jobs/ts/manage-jobs-styles"
 import { cn } from "cn"
 import { saveJobs } from "@/app/lip/actions/save"
+import getUsersPremium from "@/app/lip/api/users"
 
 /** The two actions every seeker needs: Apply Now and Save. */
 export function BrowseJobDetailsActions({ job }: { job: EmployerJob }) {
@@ -132,11 +133,15 @@ export function BrowseJobDetailsActions({ job }: { job: EmployerJob }) {
         `applicantId=${user.id}`
       )
 
-      if (applicationCount.count >= 10) {
-        router.push("/payments")
-        return
-      }
+      if (applicationCount.count >= 5) {
+        const premium = await getUsersPremium(user.id)
+        const isPremium = premium.isPremium === true || premium.premium === true
 
+        if (!isPremium) {
+          router.push("/payments")
+          return
+        }
+      }
       await applyToJob({
         jobId: job._id,
         userId: user.id,
