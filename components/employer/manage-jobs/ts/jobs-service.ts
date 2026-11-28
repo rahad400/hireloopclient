@@ -45,6 +45,7 @@ function normalizeJob(record: JobRecord): EmployerJob {
 
   return {
     _id: text(record.id) || text(record._id),
+    employerId:text(record.employerId),
     title: text(record.title),
     company: text(record.company),
     category: text(record.category),
@@ -70,6 +71,7 @@ function normalizeJob(record: JobRecord): EmployerJob {
 export function pickJobValues(record: JobRecord): JobFormValues {
   return {
     title: text(record.title),
+    employerId: text(record.employerId),
     company: text(record.company),
     category: text(record.category),
     type: toJobType(record.type),

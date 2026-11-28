@@ -4,7 +4,7 @@ import type {
 } from "@/components/employer/manage-jobs/ts/employer-job"
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000"
-
+// employer jobs post
 export async function createJobs(data: JobFormValues): Promise<void> {
   const response = await fetch(`${BASE_URL}/jobs`, {
     method: "POST",
@@ -23,6 +23,8 @@ export async function createJobs(data: JobFormValues): Promise<void> {
 
   return await response.json()
 }
+
+
 
 export async function deleteJobs(id: string): Promise<void> {
   const response = await fetch(`${BASE_URL}/jobs/${encodeURIComponent(id)}`, {

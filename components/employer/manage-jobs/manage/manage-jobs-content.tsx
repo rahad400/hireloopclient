@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
 import { deleteJobs, duplicateJob } from "@/app/lip/actions/jobs"
-import getJobs from "@/app/lip/api/jobs"
+import getJobs, { getMyJobs } from "@/app/lip/api/jobs"
 import { ManageJobCard } from "@/components/employer/manage-jobs/manage-job-card"
 import { ManageJobsEmpty } from "@/components/employer/manage-jobs/manage-jobs-empty"
 import { ManageJobsError } from "@/components/employer/manage-jobs/manage-jobs-error"
@@ -66,7 +66,7 @@ export function ManageJobsContent() {
   useEffect(() => {
     let cancelled = false
 
-    getJobs()
+    getMyJobs()
       .then((result) => {
         if (cancelled) return
 
@@ -86,7 +86,7 @@ export function ManageJobsContent() {
 
   const syncJobs = useCallback(async () => {
     const session = await getSession()
-    const result = await getJobs(`employerId=${session?.user.id}`)
+    const result = await getMyJobs(`employerId=${session?.user.id}`)
     setJobs(result)
     setError(null)
     return result
