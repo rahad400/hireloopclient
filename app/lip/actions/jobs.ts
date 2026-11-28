@@ -1,10 +1,14 @@
-import type { EmployerJob, JobFormValues } from "@/components/employer/manage-jobs/ts/employer-job"
+import type {
+  EmployerJob,
+  JobFormValues,
+} from "@/components/employer/manage-jobs/ts/employer-job"
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000"
 
 export async function createJobs(data: JobFormValues): Promise<void> {
   const response = await fetch(`${BASE_URL}/jobs`, {
     method: "POST",
+    credentials: "include",
     headers: {
       "content-type": "application/json",
     },
@@ -18,8 +22,7 @@ export async function createJobs(data: JobFormValues): Promise<void> {
   }
 
   return await response.json()
-};
-
+}
 
 export async function deleteJobs(id: string): Promise<void> {
   const response = await fetch(`${BASE_URL}/jobs/${encodeURIComponent(id)}`, {
@@ -32,15 +35,12 @@ export async function deleteJobs(id: string): Promise<void> {
       `Could not delete job post (${response.status} ${response.statusText}).`
     )
   }
-};
-
-
+}
 
 export async function duplicateJob(job: EmployerJob): Promise<void> {
   const { _id, createdAt, applicants, ...jobData } = job
   await createJobs(jobData)
 }
-
 
 export async function getJobDetails(id: string): Promise<EmployerJob | null> {
   const response = await fetch(`${BASE_URL}/job/${encodeURIComponent(id)}`, {

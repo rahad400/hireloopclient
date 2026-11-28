@@ -1,12 +1,11 @@
-import { useSession } from "@/app/lip/auth-client"
+
 import type {
   EmployerJob,
   JobFormValues,
   JobStatus,
   JobStatusFilter,
-  JobType,
 } from "@/lib/types/job"
-import { use } from "react"
+
 
 /**
  * The domain types now live in `lib/types/job.ts`.
@@ -29,35 +28,14 @@ export const jobStatusFilterOptions: {
   { value: "Expired", label: "Expired" },
 ]
 
-export const jobTypeOptions: JobType[] = [
-  "Full-time",
-  "Part-time",
-  "Contract",
-  "Internship",
-]
 
-export const jobCategoryOptions = [
-  "Engineering & Tech",
-  "Design & Creative",
-  "Marketing & Sales",
-  "Customer Support",
-  "Finance & Legal",
-  "Operations",
-  "Other",
-]
 
-export const salaryFrequencyOptions = [
-  "per hour",
-  "per day",
-  "per month",
-  "per year",
-]
 
 /** Empty form used by the Add Job page. */
-const { data: session } = useSession()
+
 export const emptyJobForm: JobFormValues = {
   title: "",
-  employerId: session?.user.id ?? "",
+  employerId: "",
   company: "",
   category: "",
   type: "Full-time",
@@ -172,6 +150,7 @@ export function getJobCompensation(job: JobFormValues) {
 export function toJobValues(job: JobFormValues): JobFormValues {
   return {
     title: job.title,
+    employerId: job.employerId,
     company: job.company,
     category: job.category,
     type: job.type,

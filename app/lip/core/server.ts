@@ -1,8 +1,9 @@
+"use server"
 
 import { auth } from "@/app/lip/auth";
-import { headers } from "next/headers"
+import { headers } from "next/headers";
+
 export const getSession = async () => {
-    "use server";
     const session = await auth.api.getSession({
         headers: await headers()
     })

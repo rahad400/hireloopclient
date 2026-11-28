@@ -7,10 +7,8 @@ import { jobInputClassName } from "@/components/employer/add-job/ts/job-form-sty
 import { JobSelect } from "@/components/employer/add-job/job-select"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
-import {
-  salaryFrequencyOptions,
-  type JobFormValues,
-} from "@/components/employer/manage-jobs/ts/employer-job"
+import type { JobFormValues } from "@/components/employer/manage-jobs/ts/employer-job"
+import { salaryFrequencyOptions } from "@/app/lip/constants/job-options"
 
 type LocationCompensationFieldsProps = {
   values: JobFormValues

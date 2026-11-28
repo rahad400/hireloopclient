@@ -8,9 +8,9 @@ import { JobSelect } from "@/components/employer/add-job/job-select"
 import { JobTypeSelector } from "@/components/employer/add-job/job-type-selector"
 import { Input } from "@/components/ui/input"
 import {
-  jobCategoryOptions,
   type JobFormValues,
 } from "@/components/employer/manage-jobs/ts/employer-job"
+import { jobCategoryOptions } from "@/app/lip/constants/job-options"
 
 type BasicInformationFieldsProps = {
   values: JobFormValues

@@ -2,10 +2,8 @@
 
 import { cn } from "cn"
 
-import {
-  jobTypeOptions,
-  type JobType,
-} from "@/components/employer/manage-jobs/ts/employer-job"
+import type { JobType } from "@/components/employer/manage-jobs/ts/employer-job"
+import { jobTypeOptions } from "@/app/lip/constants/job-options"
 
 /** Four-option segmented control from the Figma "Job Type" field. */
 export function JobTypeSelector({

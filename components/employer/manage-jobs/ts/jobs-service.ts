@@ -1,8 +1,8 @@
 import {
-  jobTypeOptions,
   type EmployerJob,
   type JobFormValues,
 } from "@/components/employer/manage-jobs/ts/employer-job"
+import { jobTypeOptions } from "@/app/lip/constants/job-options"
 
 /**
  * Server-only jobs service.

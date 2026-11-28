@@ -1,8 +1,6 @@
-import {
-  jobCategoryOptions,
-  jobTypeOptions,
-} from "@/components/employer/manage-jobs/ts/employer-job"
 
+
+import { jobCategoryOptions, jobTypeOptions } from "@/app/lip/constants/job-options"
 import type { FilterOption } from "@/components/browse-jobs/ts/browse-jobs-types"
 
 /** Value used by every dropdown's "All" option. */
